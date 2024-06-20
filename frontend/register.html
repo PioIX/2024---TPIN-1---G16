@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In</title>
+    <title>Register</title>
 </head>
 <body>
 
-    <h2>Log in</h2>
-    <form id="loginForm">
+    <h2>Register</h2>
+    <form id="registerForm">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
         <br><br>
@@ -17,12 +17,17 @@
         <input type="password" id="password" name="password" required>
         <br><br>
         
-        <button type="submit">Submit</button>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <br><br>
+        
+        <button type="submit">Register</button>
     </form>
     <br>
-    <p>¿Dont have an account? <a href="register.html">Register Here</a></p>
+    <p>¿Already have an account? <a href="index.html">Log in here</a></p>
+
     <script src="functions.js"></script>
     <script src="dom.js"></script>
-    <script src="domLogin.js"></script>
+    <script src="domRegister.js"></script>
 </body>
 </html>
