@@ -1,0 +1,19 @@
+{
+  "name": "guess-the-eleven",
+  "version": "1.0.0",
+  "description": "app backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "keywords": [
+    "EN"
+  ],
+  "author": "ciapparelli-colodro-debona-nigro-pereira",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.3"
+  }
+}
