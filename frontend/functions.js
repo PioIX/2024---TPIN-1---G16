@@ -1,13 +1,29 @@
-async function getAllUsers(){
-    const response = await fetch("http://localhost:3000/users", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
+async function getUser(username, password) {
+    const queryParams = `?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+
+    const url = `http://localhost:3000/users${queryParams}`;
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            alert("Login Failed!")
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-    })
-    
-    const users = await response.json()
-    return users
+
+        const res = await response.json();
+        console.log(res);
+        alert("Login OK");
+        return res;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw error;
+    }
 }
 
 async function postUser(username, password){
@@ -32,31 +48,7 @@ async function postUser(username, password){
     return res
 }
 
-async function userExists(username, password) {
-    const users = await getAllUsers()
-
-    let i = 0;
-    while (i < users.length && users[i].username != username) {
-        i++;
-    }
-
-    if (i == users.length){
-        return -1
-    } 
-
-    else if (users[i].username == username && users[i].password == password) {
-        return users[i].id_user;
-    }
-
-    else if (users[i].username == username && users[i].password != password) {
-        return 0
-    }
-    return -1
-}
-
 async function logIn(username, password){
-    let userId = await userExists(username, password)
-
     if (userId >= 1) {
         alert("Log In Successful")
         let idActiveUser = userId
