@@ -1,4 +1,4 @@
-async function getUser(username, password) {
+async function logIn(username, password) {
     const queryParams = `?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
     const url = `http://localhost:3000/users${queryParams}`;
@@ -11,15 +11,16 @@ async function getUser(username, password) {
             }
         });
 
+        const res = await response.json();
+
         if (!response.ok) {
-            alert("Login Failed!")
+            alert(res.message)
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
-        const res = await response.json();
-        console.log(res);
+        
         alert("Login OK");
-        return res;
+        return 1;
+
     } catch (error) {
         console.error('Error fetching user:', error);
         throw error;
@@ -45,33 +46,14 @@ async function postUser(username, password){
     
     let res = await response.json()
     console.log(res)
-    return res
-}
-
-async function logIn(username, password){
-    if (userId >= 1) {
-        alert("Log In Successful")
-        let idActiveUser = userId
-        return true
-    }
-    else if (userId == 0) {
-        alert("Incorrect Password")
-        return false
-    }
-
-    else {
-        alert("User not exists") 
-        return false
-    } 
+    return res.message
 }
 
 async function registerNewUser(username, password, confirmPassword) {
     if (password != confirmPassword) {
         return alert("Passwords are different")
     }
-    else {
-        userPost = await postUser(username, password)
-        return alert(userPost.message)
-    }
-
+   
+    userPost = await postUser(username, password)
+    return alert(userPost)
 }

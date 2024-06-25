@@ -39,13 +39,20 @@ app.get('/users', async function(req, res) {
 
 app.post('/users', async function(req, res) {
     let body = req.body;
-    username = await MySQL.makeQuery(`SELECT * FROM Users WHERE username = "${body.username}"`);
-    if (username === undefined || username.length === 0) {
-        const respuesta = await MySQL.makeQuery(`INSERT INTO Users (username, password, players_completed, players_failed, perfect_elevens) VALUES ("${body.username}", "${body.password}", "${body.players_completed}", "${body.players_failed}", "${body.perfect_elevens}");`);
-        res.send({status: "ok"});
+
+    // Validación de entradas
+    if (!body.username || !body.password || body.players_completed === undefined || body.players_failed === undefined || body.perfect_elevens === undefined) {
+        return res.status(400).send({ status: "error", message: "All fields are required." });
+    }
+    
+    usernameExists = await MySQL.makeQuery(`SELECT * FROM Users WHERE username = "${body.username}"`);
+
+    if (usernameExists === undefined || usernameExists.length === 0) {
+        const insertUser = await MySQL.makeQuery(`INSERT INTO Users (username, password, players_completed, players_failed, perfect_elevens) VALUES ("${body.username}", "${body.password}", "${body.players_completed}", "${body.players_failed}", "${body.perfect_elevens}");`);
+        res.send({status: "ok", message: "User registered successfully!"});
         
     } else {
         console.log("Username is already used")
-        res.send({status: "ok"});
+        res.status(401).send({status: "error", message: "Username is already used"});
     }
 });
