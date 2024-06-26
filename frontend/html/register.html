@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="styles/styles.css" rel="stylesheet">
+    <title>Register</title>
+</head>
+<body>
+    <header> 
+        <h2>Guess the 11</h2>
+    </header>
+    <main id="register">
+        <h1>Register</h1>
+        <form id="registerForm">
+            <div id="registerUsername">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <br><br>
+            </div>
+            <div id="registerPassword">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <br><br>
+            </div>
+            <div id="registerConfirmPassword">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <br><br>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <br>
+        <p>¿Already have an account? <a href="login.html">Log in here</a></p>
+    </main>
+    <script src="functions.js"></script>
+    <script src="dom.js"></script>
+    <script src="domRegister.js"></script>
+</body>
+</html>
