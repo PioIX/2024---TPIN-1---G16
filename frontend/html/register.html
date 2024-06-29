@@ -4,36 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
     <link href="styles/styles.css" rel="stylesheet">
     <title>Register</title>
 </head>
 <body>
     <header> 
         <h2>Guess the 11</h2>
+        <img src="images/soccer-ball-variant.png" alt="Logo" title="Logo" style="width: 45px; height: 45px;">
     </header>
-    <main id="register">
-        <h1>Register</h1>
-        <form id="registerForm">
-            <div id="registerUsername">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+    <article id="registerMain">
+        <div id="registerDiv">
+            <h1>Register</h1>
+            <form id="registerForm">
+                <div id="registerUsername">
+                    <label for="username"><b>Username</b></label>
+                    <input type="text" id="username" name="username" required>
+                </div>
                 <br><br>
-            </div>
-            <div id="registerPassword">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <div id="registerPassword">
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" id="password" name="password" required>
+                </div>
                 <br><br>
-            </div>
-            <div id="registerConfirmPassword">
-                <label for="confirmPassword">Confirm Password:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div id="registerConfirmPassword">
+                    <label for="confirmPassword"><b>Confirm Password</b></label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
                 <br><br>
-            </div>
-            <button type="submit">Register</button>
-        </form>
-        <br>
-        <p>¿Already have an account? <a href="login.html">Log in here</a></p>
-    </main>
+                <button type="submit">Submit</button>
+            </form>
+            <br>
+            <p>¿Already have an account? <a href="login.html">Log in here</a></p>
+        </div>
+    </article>
+    <footer>
+        © 2024. The Guess The Eleven Game.
+    </footer>
     <script src="functions.js"></script>
     <script src="dom.js"></script>
     <script src="domRegister.js"></script>

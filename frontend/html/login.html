@@ -4,29 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
     <link href="styles/styles.css" rel="stylesheet">
     <title>Log In</title>
 </head>
 <body>
     <header>
         <h2>Guess the 11</h2>
+        <img src="images/soccer-ball-variant.png" alt="Logo" title="Logo" style="width: 45px; height: 45px;">
     </header>
         <article>
-            <form id="loginForm">
+            <div id="containerForm">
                 <h1>Log In</h1>
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <form id="loginForm">
+                    <div id="divUsername">
+                        <label for="username"><b>Username</b></label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <br><br>
+                    <div id="divPassword">
+                        <label for="password"><b>Password</b></label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <br><br>
+                    <button type="submit" id="submitForm">Submit</button>
+                </form>
                 <br><br>
-                
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-                <br><br>
-                
-                <button type="submit">Submit</button>
-            </form>
+                <p>No account? <a href="register.html">Register here</a></p>
+            </div>
         </article>
     <footer>
-        <p>No account?<a href="register.html">Register here</a></p>
+        © 2024. The Guess The Eleven Game.
     </footer>
     <script src="functions.js"></script>
     <script src="dom.js"></script>
