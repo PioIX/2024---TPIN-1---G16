@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +10,6 @@
     <link href="styles/styles.css" rel="stylesheet">
     <title>Log In</title>
 </head>
-
 <body>
     <header>
         <h2>Guess the 11</h2>
@@ -20,55 +18,61 @@
     <button onclick="getAllFromMatches()">Traer todos los partidos</button>
     <form id="formMatch">
         <label for="team">Team:</label>
-        <input type="number" id="team" name="team">
+        <input type="number" id="match-team" name="team">
 
         <label for="rivalTeam">Rival Team:</label>
-        <input type="text" id="rivalTeam" name="rivalTeam">
+        <input type="text" id="match-rivalTeam" name="rivalTeam">
 
         <label for="result">Result:</label>
-        <input type="text" id="result" name="result">
+        <input type="text" id="match-result" name="result">
 
         <label for="date">Date:</label>
-        <input type="text" id="date" name="date">
+        <input type="text" id="match-date" name="date">
 
         <label for="stadium">Stadium:</label>
-        <input type="number" id="stadium" name="stadium">
+        <input type="number" id="match-stadium" name="stadium">
 
         <label for="league">League:</label>
-        <input type="number" id="league" name="league">
+        <input type="number" id="match-league" name="league">
     </form>
-
     <input type="submit" onclick="addNewMatch()">
-    <div id="table">
-    </div>
+    <div id="table-matches"></div>
 
     <button onclick="getAllFromPlayers()">Get All Players</button>
     <form id="formPlayer">
         <label for="surname">Surname:</label>
-        <input type="text" id="surname" name="surname">
+        <input type="text" id="player-surname" name="surname">
 
         <label for="nationality">Nationality:</label>
-        <input type="text" id="nationality" name="nationality">
+        <input type="text" id="player-nationality" name="nationality">
 
         <label for="surname_letters">Surname Letters:</label>
-        <input type="number" id="surname_letters" name="surname_letters">
+        <input type="number" id="player-surname_letters" name="surname_letters">
     </form>
-
     <input type="submit" onclick="addNewPlayer()">
     <div id="table-players"></div>
 
     <button onclick="getAllFromTeams()">Traer todos los equipos</button>
     <form id="formTeam">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
+        <input type="text" id="team-name" name="name">
 
         <label for="country">Country:</label>
-        <input type="text" id="country" name="country">
+        <input type="text" id="team-country" name="country">
     </form>
-
     <input type="submit" onclick="addNewTeam()">
     <div id="table-teams"></div>
 
+    <button onclick="getAllFromLeagues()">Traer todas las ligas</button>
+    <form id="formLeague">
+        <label for="name">Name:</label>
+        <input type="text" id="league-name" name="name">
+
+        <label for="country">Country:</label>
+        <input type="text" id="league-country" name="country">
+    </form>
+    <input type="submit" onclick="addNewLeague()">
+    <div id="table-leagues"></div>
 
     <footer>
         © 2024. The Guess The Eleven Game.
@@ -76,5 +80,4 @@
     <script src="../functions.js"></script>
     <script src="../admin.js"></script>
 </body>
-
 </html>

@@ -1,4 +1,4 @@
-console.log("hello world!")
+console.log("hello world!");
 
 async function getAllFromMatches() {
     const response = await fetch("http://localhost:3000/matches", {
@@ -6,15 +6,15 @@ async function getAllFromMatches() {
         headers: {
             "Content-Type": "application/json"
         }
-    })
-    
-    const result = await response.json()
-    console.log(result)
+    });
+
+    const result = await response.json();
+    console.log(result);
 
     function drawTable(x) {
         const match = result[x];
-        document.getElementById("table").innerHTML += `
-        <table id="table-${match.id_match}">
+        document.getElementById("table-matches").innerHTML += `
+        <table id="table-match-${match.id_match}">
             <tr>
                 <th>Categoria</th>
                 <th>Valor Actual</th>
@@ -61,10 +61,9 @@ async function getAllFromMatches() {
         <br>`;
     }
 
-    for(let i = 0; i < result.length; i++){
-        drawTable(i)
+    for (let i = 0; i < result.length; i++) {
+        drawTable(i);
     }
-
 }
 
 async function addNewMatch() {
@@ -102,19 +101,18 @@ async function addNewMatch() {
     }
 }
 
-
-async function deleteMatch(id){
+async function deleteMatch(id) {
     const response = await fetch("http://localhost:3000/matches", {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({id_match: id})
-    })
+        body: JSON.stringify({ id_match: id })
+    });
 
-    let res = await response.json()
-    console.log(res)
-    location.reload()
+    let res = await response.json();
+    console.log(res);
+    location.reload();
 }
 
 async function updateMatch(id) {
@@ -157,11 +155,11 @@ async function getAllFromPlayers() {
     function drawTable(x) {
         const player = result[x];
         document.getElementById("table-players").innerHTML += `
-        <table id="table-${player.id_player}">
+        <table id="player-table-${player.id_player}">
             <tr>
-                <th>Category</th>
-                <th>Current Value</th>
-                <th>New Value</th>
+                <th>Categoria</th>
+                <th>Valor Actual</th>
+                <th>Nuevo Valor</th>
             </tr>
             <tr>
                 <td>Player ID:</td>
@@ -184,8 +182,8 @@ async function getAllFromPlayers() {
                 <td><input type="number" id="surname_letters-${player.id_player}" value="${player.surname_letters}"></td>
             </tr>
         </table>
-        <button onclick="deletePlayer(${player.id_player})">Delete Player</button>
-        <button onclick="updatePlayer(${player.id_player})">Update Player</button>
+        <button onclick="deletePlayer(${player.id_player})">Eliminar Jugador</button>
+        <button onclick="updatePlayer(${player.id_player})">Actualizar Jugador</button>
         <br>`;
     }
 
@@ -220,7 +218,7 @@ async function addNewPlayer() {
         let res = await response.json();
         console.log(res);
         location.reload();
-        document.getElementById("formPlayer").reset();  // Clear the form
+        document.getElementById("formPlayer").reset();  // Limpia el formulario
     } catch (error) {
         console.error('Error adding new player:', error);
     }
@@ -270,33 +268,33 @@ async function getAllFromTeams() {
             "Content-Type": "application/json"
         }
     });
-    
+
     const result = await response.json();
     console.log(result);
 
     function drawTable(x) {
         const team = result[x];
         document.getElementById("table-teams").innerHTML += `
-        <table id="table-${team.id_team}">
+        <table id="team-table-${team.id_team}">
             <tr>
                 <th>Categoria</th>
                 <th>Valor Actual</th>
                 <th>Nuevo Valor</th>
             </tr>
             <tr>
-                <td>Id Team:</td>
+                <td>Team ID:</td>
                 <td>${team.id_team}</td>
                 <td></td>
             </tr>
             <tr>
                 <td>Name:</td>
                 <td>${team.name}</td>
-                <td><input type="text" id="name-${team.id_team}" value="${team.name}"></td>
+                <td><input type="text" id="team-name-${team.id_team}" value="${team.name}"></td>
             </tr>
             <tr>
                 <td>Country:</td>
                 <td>${team.country}</td>
-                <td><input type="text" id="country-${team.id_team}" value="${team.country}"></td>
+                <td><input type="text" id="team-country-${team.id_team}" value="${team.country}"></td>
             </tr>
         </table>
         <button onclick="deleteTeam(${team.id_team})">Eliminar Equipo</button>
@@ -311,8 +309,8 @@ async function getAllFromTeams() {
 
 async function addNewTeam() {
     const team = {
-        name: document.getElementById("name").value,
-        country: document.getElementById("country").value
+        name: document.getElementById("team-name").value,
+        country: document.getElementById("team-country").value
     };
 
     console.log(team);
@@ -357,13 +355,126 @@ async function deleteTeam(id) {
 async function updateTeam(id) {
     const data = {
         id_team: id,
-        name: document.getElementById("name-" + id).value,
-        country: document.getElementById("country-" + id).value
+        name: document.getElementById("team-name-" + id).value,
+        country: document.getElementById("team-country-" + id).value
     };
 
     console.log(JSON.stringify(data));
 
     const response = await fetch("http://localhost:3000/teams", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+
+async function getAllFromLeagues() {
+    const response = await fetch("http://localhost:3000/leagues", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    function drawTable(x) {
+        const league = result[x];
+        document.getElementById("table-leagues").innerHTML += `
+        <table id="league-table-${league.id_league}">
+            <tr>
+                <th>Categoria</th>
+                <th>Valor Actual</th>
+                <th>Nuevo Valor</th>
+            </tr>
+            <tr>
+                <td>League ID:</td>
+                <td>${league.id_league}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>${league.name}</td>
+                <td><input type="text" id="league-name-${league.id_league}" value="${league.name}"></td>
+            </tr>
+            <tr>
+                <td>Country:</td>
+                <td>${league.country}</td>
+                <td><input type="text" id="league-country-${league.id_league}" value="${league.country}"></td>
+            </tr>
+        </table>
+        <button onclick="deleteLeague(${league.id_league})">Eliminar Liga</button>
+        <button onclick="updateLeague(${league.id_league})">Actualizar Liga</button>
+        <br>`;
+    }
+
+    for (let i = 0; i < result.length; i++) {
+        drawTable(i);
+    }
+}
+
+async function addNewLeague() {
+    const league = {
+        name: document.getElementById("league-name").value,
+        country: document.getElementById("league-country").value
+    };
+
+    console.log(league);
+
+    try {
+        const response = await fetch("http://localhost:3000/leagues", {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(league)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        let res = await response.json();
+        console.log(res);
+        location.reload();
+        document.getElementById("formLeague").reset();  // Limpia el formulario
+    } catch (error) {
+        console.error('Error adding new league:', error);
+    }
+}
+
+async function deleteLeague(id) {
+    const response = await fetch("http://localhost:3000/leagues", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id_league: id })
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+
+async function updateLeague(id) {
+    const data = {
+        id_league: id,
+        name: document.getElementById("league-name-" + id).value,
+        country: document.getElementById("league-country-" + id).value
+    };
+
+    console.log(JSON.stringify(data));
+
+    const response = await fetch("http://localhost:3000/leagues", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

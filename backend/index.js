@@ -358,17 +358,20 @@ app.delete('/teams', async function(req, res) {
 
         // First delete from Elevens table
         for (let i = 0; i < ids.length; i++) {
-            await MySQL.makeQuery(`
+            response = await MySQL.makeQuery(`
             DELETE FROM Elevens
             WHERE id_team = "${ids[i]}";`);
-        }
+        
+        // Then delete from TeamsByLeagues
+            response = await MySQL.makeQuery(`
+            DELETE FROM TeamsByLeagues
+            WHERE id_team = "${ids[i]}";`);
 
         // Then delete from Teams table
-        for (let i = 0; i < ids.length; i++) {
             response = await MySQL.makeQuery(`
             DELETE FROM Teams
-            WHERE id_team = "${ids[i]}";`);
-        }
+            WHERE id_team = "${ids[i]}";`);}
+
 
         res.send(response);
     } catch (error) {
@@ -376,4 +379,103 @@ app.delete('/teams', async function(req, res) {
         res.status(500).send({ status: "error", message: "An error occurred while deleting the team." });
     }
 });
+
+// HEAD: LEAGUES
+app.get('/leagues', async function(req, res) {
+    try {
+        const response = await MySQL.makeQuery("SELECT * FROM Leagues;");
+        res.send(response);
+    } catch (error) {
+        console.error('Error retrieving leagues:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while retrieving leagues." });
+    }
+});
+
+app.post('/leagues', async function(req, res) {
+    try {
+        let body = req.body;
+
+        // Input validation
+        if (!body.name || !body.country) {
+            return res.status(400).send({ status: "error", message: "All fields are required." });
+        }
+
+        // Check if the league already exists
+        let leagueExists = await MySQL.makeQuery(`SELECT * FROM Leagues WHERE name = "${body.name}" AND country = "${body.country}";`);
+
+        if (leagueExists === undefined || leagueExists.length === 0) {
+            // Insert new league
+            await MySQL.makeQuery(`INSERT INTO Leagues (name, country) VALUES ("${body.name}", "${body.country}");`);
+            res.send({ status: "ok", message: "League added successfully!" });
+        } else {
+            console.log("League already exists");
+            res.status(401).send({ status: "error", message: "League already exists" });
+        }
+    } catch (error) {
+        console.error('Error adding league:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while adding the league." });
+    }
+});
+
+app.put('/leagues', async function(req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let keys = Object.keys(body);
+        let values = Object.values(body);
+
+        let setClause = keys.slice(1).map((key, index) => `${key} = '${values[index + 1]}'`).join(', ');
+
+        await MySQL.makeQuery(
+            `UPDATE Leagues
+            SET ${setClause}
+            WHERE ${keys[0]} = '${values[0]}';`
+        );
+
+        res.send({ status: "ok", message: "League updated successfully!" });
+    } catch (error) {
+        console.error('Error updating league:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while updating the league." });
+    }
+});
+
+app.delete('/leagues', async function(req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let keys = Object.keys(body);
+        let values = Object.values(body);
+
+        let ids = [];
+
+        // Loop to find ids that match one or more criteria
+        for (let i = 0; i < keys.length; i++) {
+            let response = await MySQL.makeQuery(`SELECT id_league FROM Leagues WHERE ${keys[i]} = "${values[i]}";`);
+
+            console.log("response: ", response);
+            if (response.length !== 0 && response !== undefined) {
+                ids.push(response[0].id_league);
+            }
+        }
+
+        if (ids.length === 0 || ids === undefined) {
+            return res.send("No leagues with that characteristic");
+        }
+
+        // Delete associated records from dependent tables
+        for (let i = 0; i < ids.length; i++) {
+            await MySQL.makeQuery(`DELETE FROM TeamsByLeagues WHERE id_league = "${ids[i]}";`);
+            await MySQL.makeQuery(`DELETE FROM Matches WHERE id_league = "${ids[i]}";`);
+            await MySQL.makeQuery(`DELETE FROM Leagues WHERE id_league = "${ids[i]}";`);
+        }
+
+        res.send({ status: "ok", message: "Leagues deleted successfully!" });
+    } catch (error) {
+        console.error('Error deleting league:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while deleting the league." });
+    }
+});
+
 
