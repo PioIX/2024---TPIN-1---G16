@@ -74,6 +74,18 @@
     <input type="submit" onclick="addNewLeague()">
     <div id="table-leagues"></div>
 
+    <button onclick="getAllFromStadiums()">Traer todos los estadios</button>
+<form id="formStadium">
+    <label for="name">Name:</label>
+    <input type="text" id="stadium-name" name="name">
+
+    <label for="city">City:</label>
+    <input type="text" id="stadium-city" name="city">
+</form>
+<input type="submit" onclick="addNewStadium()">
+<div id="table-stadiums"></div>
+
+
     <footer>
         © 2024. The Guess The Eleven Game.
     </footer>

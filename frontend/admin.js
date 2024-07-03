@@ -486,3 +486,117 @@ async function updateLeague(id) {
     console.log(res);
     location.reload();
 }
+
+async function getAllFromStadiums() {
+    const response = await fetch("http://localhost:3000/stadiums", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    function drawTable(x) {
+        const stadium = result[x];
+        document.getElementById("table-stadiums").innerHTML += `
+        <table id="stadium-table-${stadium.id_stadium}">
+            <tr>
+                <th>Categoria</th>
+                <th>Valor Actual</th>
+                <th>Nuevo Valor</th>
+            </tr>
+            <tr>
+                <td>Stadium ID:</td>
+                <td>${stadium.id_stadium}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>${stadium.name}</td>
+                <td><input type="text" id="stadium-name-${stadium.id_stadium}" value="${stadium.name}"></td>
+            </tr>
+            <tr>
+                <td>City:</td>
+                <td>${stadium.city}</td>
+                <td><input type="text" id="stadium-city-${stadium.id_stadium}" value="${stadium.city}"></td>
+            </tr>
+        </table>
+        <button onclick="deleteStadium(${stadium.id_stadium})">Eliminar Estadio</button>
+        <button onclick="updateStadium(${stadium.id_stadium})">Actualizar Estadio</button>
+        <br>`;
+    }
+
+    for (let i = 0; i < result.length; i++) {
+        drawTable(i);
+    }
+}
+
+async function addNewStadium() {
+    const stadium = {
+        name: document.getElementById("stadium-name").value,
+        city: document.getElementById("stadium-city").value
+    };
+
+    console.log(stadium);
+
+    try {
+        const response = await fetch("http://localhost:3000/stadiums", {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(stadium)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        let res = await response.json();
+        console.log(res);
+        location.reload();
+        document.getElementById("formStadium").reset();  // Limpia el formulario
+    } catch (error) {
+        console.error('Error adding new stadium:', error);
+    }
+}
+
+async function deleteStadium(id) {
+    const response = await fetch("http://localhost:3000/stadiums", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id_stadium: id })
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+
+async function updateStadium(id) {
+    const data = {
+        id_stadium: id,
+        name: document.getElementById("stadium-name-" + id).value,
+        city: document.getElementById("stadium-city-" + id).value
+    };
+
+    console.log(JSON.stringify(data));
+
+    const response = await fetch("http://localhost:3000/stadiums", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+

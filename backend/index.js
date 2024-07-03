@@ -478,4 +478,105 @@ app.delete('/leagues', async function(req, res) {
     }
 });
 
+// HEAD: STADIUMS
+app.get('/stadiums', async function (req, res) {
+    try {
+        const response = await MySQL.makeQuery("SELECT * FROM Stadiums;");
+        res.send(response);
+    } catch (error) {
+        console.error('Error retrieving stadiums:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while retrieving stadiums." });
+    }
+});
+
+app.post('/stadiums', async function (req, res) {
+    try {
+        let body = req.body;
+
+        // Input validation
+        if (!body.name || !body.city) {
+            return res.status(400).send({ status: "error", message: "All fields are required." });
+        }
+
+        // Check if the stadium already exists
+        let stadiumExists = await MySQL.makeQuery(`SELECT * FROM Stadiums WHERE name = "${body.name}" AND city = "${body.city}";`);
+
+        if (stadiumExists === undefined || stadiumExists.length === 0) {
+            // Insert new stadium
+            await MySQL.makeQuery(`INSERT INTO Stadiums (name, city) VALUES ("${body.name}", "${body.city}");`);
+            res.send({ status: "ok", message: "Stadium added successfully!" });
+        } else {
+            console.log("Stadium already exists");
+            res.status(401).send({ status: "error", message: "Stadium already exists" });
+        }
+    } catch (error) {
+        console.error('Error adding stadium:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while adding the stadium." });
+    }
+});
+
+app.put('/stadiums', async function (req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let keys = Object.keys(body);
+        let values = Object.values(body);
+
+        let setClause = keys.slice(1).map((key, index) => `${key} = '${values[index + 1]}'`).join(', ');
+
+        await MySQL.makeQuery(`
+            UPDATE Stadiums
+            SET ${setClause}
+            WHERE ${keys[0]} = '${values[0]}';`
+        );
+
+        res.send({ status: "ok", message: "Stadium updated successfully!" });
+    } catch (error) {
+        console.error('Error updating stadium:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while updating the stadium." });
+    }
+});
+
+app.delete('/stadiums', async function (req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let keys = Object.keys(body);
+        let values = Object.values(body);
+
+        let ids = [];
+
+        // Loop to find ids that match one or more criteria
+        for (let i = 0; i < keys.length; i++) {
+            let response = await MySQL.makeQuery(`SELECT id_stadium FROM Stadiums WHERE ${keys[i]} = "${values[i]}";`);
+
+            console.log("response: ", response);
+            if (response.length !== 0 && response !== undefined) {
+                ids.push(response[0].id_stadium);
+            }
+        }
+
+        if (ids.length === 0 || ids === undefined) {
+            return res.send("No stadiums with that characteristic");
+        }
+
+        // Delete associated records from Matches table first
+        for (let i = 0; i < ids.length; i++) {
+            await MySQL.makeQuery(`DELETE FROM Matches WHERE id_stadium = "${ids[i]}";`);
+        }
+
+        // Then delete from Stadiums table
+        for (let i = 0; i < ids.length; i++) {
+            await MySQL.makeQuery(`DELETE FROM Stadiums WHERE id_stadium = "${ids[i]}";`);
+        }
+
+        res.send({ status: "ok", message: "Stadiums deleted successfully!" });
+    } catch (error) {
+        console.error('Error deleting stadium:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while deleting the stadium." });
+    }
+});
+
 
