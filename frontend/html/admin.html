@@ -57,6 +57,18 @@
     <input type="submit" onclick="addNewPlayer()">
     <div id="table-players"></div>
 
+    <button onclick="getAllFromTeams()">Traer todos los equipos</button>
+    <form id="formTeam">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country">
+    </form>
+
+    <input type="submit" onclick="addNewTeam()">
+    <div id="table-teams"></div>
+
 
     <footer>
         © 2024. The Guess The Eleven Game.

@@ -262,3 +262,116 @@ async function updatePlayer(id) {
     console.log(res);
     location.reload();
 }
+
+async function getAllFromTeams() {
+    const response = await fetch("http://localhost:3000/teams", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    
+    const result = await response.json();
+    console.log(result);
+
+    function drawTable(x) {
+        const team = result[x];
+        document.getElementById("table-teams").innerHTML += `
+        <table id="table-${team.id_team}">
+            <tr>
+                <th>Categoria</th>
+                <th>Valor Actual</th>
+                <th>Nuevo Valor</th>
+            </tr>
+            <tr>
+                <td>Id Team:</td>
+                <td>${team.id_team}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>${team.name}</td>
+                <td><input type="text" id="name-${team.id_team}" value="${team.name}"></td>
+            </tr>
+            <tr>
+                <td>Country:</td>
+                <td>${team.country}</td>
+                <td><input type="text" id="country-${team.id_team}" value="${team.country}"></td>
+            </tr>
+        </table>
+        <button onclick="deleteTeam(${team.id_team})">Eliminar Equipo</button>
+        <button onclick="updateTeam(${team.id_team})">Actualizar Equipo</button>
+        <br>`;
+    }
+
+    for (let i = 0; i < result.length; i++) {
+        drawTable(i);
+    }
+}
+
+async function addNewTeam() {
+    const team = {
+        name: document.getElementById("name").value,
+        country: document.getElementById("country").value
+    };
+
+    console.log(team);
+
+    try {
+        const response = await fetch("http://localhost:3000/teams", {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(team)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        let res = await response.json();
+        console.log(res);
+        location.reload();
+        document.getElementById("formTeam").reset();  // Limpia el formulario
+    } catch (error) {
+        console.error('Error adding new team:', error);
+    }
+}
+
+async function deleteTeam(id) {
+    const response = await fetch("http://localhost:3000/teams", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id_team: id })
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+
+async function updateTeam(id) {
+    const data = {
+        id_team: id,
+        name: document.getElementById("name-" + id).value,
+        country: document.getElementById("country-" + id).value
+    };
+
+    console.log(JSON.stringify(data));
+
+    const response = await fetch("http://localhost:3000/teams", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}

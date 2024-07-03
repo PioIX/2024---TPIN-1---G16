@@ -12,12 +12,12 @@ app.use(cors());
 
 const MySQL = require('./modules/mysql.js'); // Gets MySql from modules
 
-app.listen(port, function() {
+app.listen(port, function () {
     console.log(`Server running at http://localhost:${port}`);
     console.log('Defined routes:');
 });
 
-app.get('/users', async function(req, res) {
+app.get('/users', async function (req, res) {
     try {
         let query = req.query;
         console.log(query);
@@ -43,7 +43,7 @@ app.get('/users', async function(req, res) {
     }
 });
 
-app.post('/users', async function(req, res) {
+app.post('/users', async function (req, res) {
     try {
         let body = req.body;
 
@@ -68,7 +68,7 @@ app.post('/users', async function(req, res) {
 });
 
 // HEAD: MATCHES
-app.get('/matches', async function(req, res) {
+app.get('/matches', async function (req, res) {
     try {
         const response = await MySQL.makeQuery(`SELECT * FROM Matches;`);
         res.send(response);
@@ -78,7 +78,7 @@ app.get('/matches', async function(req, res) {
     }
 });
 
-app.post('/matches', async function(req, res) {
+app.post('/matches', async function (req, res) {
     try {
         let body = req.body;
 
@@ -104,7 +104,7 @@ app.post('/matches', async function(req, res) {
     }
 });
 
-app.put('/matches', async function(req, res) {
+app.put('/matches', async function (req, res) {
     try {
         let body = req.body;
         console.log(body);
@@ -127,7 +127,7 @@ app.put('/matches', async function(req, res) {
     }
 });
 
-app.delete('/matches', async function(req, res) {
+app.delete('/matches', async function (req, res) {
     try {
         let body = req.body;
         console.log(body);
@@ -173,7 +173,7 @@ app.delete('/matches', async function(req, res) {
 });
 
 // HEAD: PLAYERS
-app.get('/players', async function(req, res) {
+app.get('/players', async function (req, res) {
     try {
         const response = await MySQL.makeQuery(`SELECT * FROM Players;`);
         res.send(response);
@@ -183,7 +183,7 @@ app.get('/players', async function(req, res) {
     }
 });
 
-app.post('/players', async function(req, res) {
+app.post('/players', async function (req, res) {
     try {
         let body = req.body;
 
@@ -209,7 +209,7 @@ app.post('/players', async function(req, res) {
     }
 });
 
-app.put('/players', async function(req, res) {
+app.put('/players', async function (req, res) {
     try {
         let body = req.body;
         console.log(body);
@@ -232,7 +232,7 @@ app.put('/players', async function(req, res) {
     }
 });
 
-app.delete('/players', async function(req, res) {
+app.delete('/players', async function (req, res) {
     try {
         let body = req.body;
         console.log(body);
@@ -262,6 +262,10 @@ app.delete('/players', async function(req, res) {
         // Delete id by id
         for (let i = 0; i < ids.length; i++) {
             response = await MySQL.makeQuery(`
+            DELETE FROM Elevens
+            WHERE id_player = "${ids[i]}";`);
+
+            response = await MySQL.makeQuery(`
             DELETE FROM Players
             WHERE id_player = "${ids[i]}";`);
         }
@@ -272,3 +276,104 @@ app.delete('/players', async function(req, res) {
         res.status(500).send({ status: "error", message: "An error occurred while deleting the player." });
     }
 });
+
+// HEAD: TEAMS
+app.get('/teams', async function(req, res) {
+    try {
+        const response = await MySQL.makeQuery("SELECT * FROM Teams;");
+        res.send(response);
+    } catch (error) {
+        console.error('Error retrieving teams:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while retrieving teams." });
+    }
+});
+
+app.post('/teams', async function(req, res) {
+    try {
+        let body = req.body;
+
+        // Input validation
+        if (!body.name || !body.country) {
+            return res.status(400).send({ status: "error", message: "All fields are required." });
+        }
+
+        // Insert new team
+        await MySQL.makeQuery(`INSERT INTO Teams (name, country) VALUES ("${body.name}", "${body.country}")`);
+        res.send({ status: "ok", message: "Team added successfully!" });
+    } catch (error) {
+        console.error('Error adding team:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while adding the team." });
+    }
+});
+
+app.put('/teams', async function(req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let keys = Object.keys(body);
+        let values = Object.values(body);
+
+        let response = null;
+        let setClause = keys.slice(1).map((key, index) => `${key} = '${values[index + 1]}'`).join(', ');
+
+        response = await MySQL.makeQuery(`
+        UPDATE Teams
+        SET ${setClause}
+        WHERE ${keys[0]} = '${values[0]}';`);
+
+        res.send(response);
+    } catch (error) {
+        console.error('Error updating team:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while updating the team." });
+    }
+});
+
+app.delete('/teams', async function(req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let keys = Object.keys(body);
+        let values = Object.values(body);
+
+        let response = null;
+        const ids = [];
+
+        // Find ids that match one or more criteria
+        for (let i = 0; i < keys.length; i++) {
+            response = await MySQL.makeQuery(`
+            SELECT id_team FROM Teams
+            WHERE ${keys[i]} = "${values[i]}";`);
+
+            console.log("response: ", response);
+            if (response.length !== 0 && response !== undefined) {
+                ids.push(response[0].id_team);
+            }
+        }
+
+        if (ids.length === 0 || ids === undefined) {
+            return res.send("No teams with that characteristic");
+        }
+
+        // First delete from Elevens table
+        for (let i = 0; i < ids.length; i++) {
+            await MySQL.makeQuery(`
+            DELETE FROM Elevens
+            WHERE id_team = "${ids[i]}";`);
+        }
+
+        // Then delete from Teams table
+        for (let i = 0; i < ids.length; i++) {
+            response = await MySQL.makeQuery(`
+            DELETE FROM Teams
+            WHERE id_team = "${ids[i]}";`);
+        }
+
+        res.send(response);
+    } catch (error) {
+        console.error('Error deleting team:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while deleting the team." });
+    }
+});
+
