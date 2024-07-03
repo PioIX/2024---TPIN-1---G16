@@ -171,3 +171,104 @@ app.delete('/matches', async function(req, res) {
         res.status(500).send({ status: "error", message: "An error occurred while deleting the match." });
     }
 });
+
+// HEAD: PLAYERS
+app.get('/players', async function(req, res) {
+    try {
+        const response = await MySQL.makeQuery(`SELECT * FROM Players;`);
+        res.send(response);
+    } catch (error) {
+        console.error('Error retrieving players:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while retrieving players." });
+    }
+});
+
+app.post('/players', async function(req, res) {
+    try {
+        let body = req.body;
+
+        // Input validation
+        if (!body.surname || !body.nationality || body.surname_letters === undefined) {
+            return res.status(400).send({ status: "error", message: "All fields are required." });
+        }
+
+        // Check if the player already exists
+        let playerExists = await MySQL.makeQuery(`SELECT * FROM Players WHERE surname = "${body.surname}" AND nationality = "${body.nationality}"`);
+
+        if (playerExists === undefined || playerExists.length === 0) {
+            // Insert new player
+            await MySQL.makeQuery(`INSERT INTO Players (surname, nationality, surname_letters) VALUES ("${body.surname}", "${body.nationality}", "${body.surname_letters}")`);
+            res.send({ status: "ok", message: "Player added successfully!" });
+        } else {
+            console.log("Player already exists");
+            res.status(401).send({ status: "error", message: "Player already exists" });
+        }
+    } catch (error) {
+        console.error('Error adding player:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while adding the player." });
+    }
+});
+
+app.put('/players', async function(req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let keys = Object.keys(body);
+        let values = Object.values(body);
+
+        let response = null;
+        let setClause = keys.slice(1).map((key, index) => `${key} = '${values[index + 1]}'`).join(', ');
+
+        response = await MySQL.makeQuery(`
+        UPDATE Players
+        SET ${setClause}
+        WHERE ${keys[0]} = '${values[0]}';`);
+
+        res.send(response);
+    } catch (error) {
+        console.error('Error updating player:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while updating the player." });
+    }
+});
+
+app.delete('/players', async function(req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let keys = Object.keys(body);
+        let values = Object.values(body);
+
+        let response = null;
+        const ids = [];
+
+        // Loop to find ids that match one or more criteria
+        for (let i = 0; i < keys.length; i++) {
+            response = await MySQL.makeQuery(`
+            SELECT id_player FROM Players
+            WHERE ${keys[i]} = "${values[i]}";`);
+
+            console.log("response: ", response);
+            if (response.length !== 0 && response !== undefined) {
+                ids.push(response[0].id_player);
+            }
+        }
+
+        if (ids.length === 0 || ids === undefined) {
+            return res.send("No players with that characteristic");
+        }
+
+        // Delete id by id
+        for (let i = 0; i < ids.length; i++) {
+            response = await MySQL.makeQuery(`
+            DELETE FROM Players
+            WHERE id_player = "${ids[i]}";`);
+        }
+
+        res.send(response);
+    } catch (error) {
+        console.error('Error deleting player:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while deleting the player." });
+    }
+});

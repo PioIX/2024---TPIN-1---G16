@@ -16,31 +16,48 @@
     <header>
         <h2>Guess the 11</h2>
         <img src="images/soccer-ball-variant.png" alt="Logo" title="Logo" style="width: 45px; height: 45px;">
-    </header>   
-        <button onclick="getAllFromMatches()">Traer todos los partidos</button>
-        <form id="formMatch">
-            <label for="team">Team:</label>
-            <input type="number" id="team" name="team">
-            
-            <label for="rivalTeam">Rival Team:</label>
-            <input type="text" id="rivalTeam" name="rivalTeam">
-            
-            <label for="result">Result:</label>
-            <input type="text" id="result" name="result">
-            
-            <label for="date">Date:</label>
-            <input type="text" id="date" name="date">
-            
-            <label for="stadium">Stadium:</label>
-            <input type="number" id="stadium" name="stadium">
-            
-            <label for="league">League:</label>
-            <input type="number" id="league" name="league">
-        </form>
-        
-        <input type="submit" onclick="addNewMatch()">
-        <div id="table">
-        </div>
+    </header>
+    <button onclick="getAllFromMatches()">Traer todos los partidos</button>
+    <form id="formMatch">
+        <label for="team">Team:</label>
+        <input type="number" id="team" name="team">
+
+        <label for="rivalTeam">Rival Team:</label>
+        <input type="text" id="rivalTeam" name="rivalTeam">
+
+        <label for="result">Result:</label>
+        <input type="text" id="result" name="result">
+
+        <label for="date">Date:</label>
+        <input type="text" id="date" name="date">
+
+        <label for="stadium">Stadium:</label>
+        <input type="number" id="stadium" name="stadium">
+
+        <label for="league">League:</label>
+        <input type="number" id="league" name="league">
+    </form>
+
+    <input type="submit" onclick="addNewMatch()">
+    <div id="table">
+    </div>
+
+    <button onclick="getAllFromPlayers()">Get All Players</button>
+    <form id="formPlayer">
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname">
+
+        <label for="nationality">Nationality:</label>
+        <input type="text" id="nationality" name="nationality">
+
+        <label for="surname_letters">Surname Letters:</label>
+        <input type="number" id="surname_letters" name="surname_letters">
+    </form>
+
+    <input type="submit" onclick="addNewPlayer()">
+    <div id="table-players"></div>
+
+
     <footer>
         © 2024. The Guess The Eleven Game.
     </footer>

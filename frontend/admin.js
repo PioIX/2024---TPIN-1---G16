@@ -142,3 +142,123 @@ async function updateMatch(id) {
     console.log(res);
     location.reload();
 }
+
+async function getAllFromPlayers() {
+    const response = await fetch("http://localhost:3000/players", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    function drawTable(x) {
+        const player = result[x];
+        document.getElementById("table-players").innerHTML += `
+        <table id="table-${player.id_player}">
+            <tr>
+                <th>Category</th>
+                <th>Current Value</th>
+                <th>New Value</th>
+            </tr>
+            <tr>
+                <td>Player ID:</td>
+                <td>${player.id_player}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Surname:</td>
+                <td>${player.surname}</td>
+                <td><input type="text" id="surname-${player.id_player}" value="${player.surname}"></td>
+            </tr>
+            <tr>
+                <td>Nationality:</td>
+                <td>${player.nationality}</td>
+                <td><input type="text" id="nationality-${player.id_player}" value="${player.nationality}"></td>
+            </tr>
+            <tr>
+                <td>Surname Letters:</td>
+                <td>${player.surname_letters}</td>
+                <td><input type="number" id="surname_letters-${player.id_player}" value="${player.surname_letters}"></td>
+            </tr>
+        </table>
+        <button onclick="deletePlayer(${player.id_player})">Delete Player</button>
+        <button onclick="updatePlayer(${player.id_player})">Update Player</button>
+        <br>`;
+    }
+
+    for (let i = 0; i < result.length; i++) {
+        drawTable(i);
+    }
+}
+
+async function addNewPlayer() {
+    const player = {
+        surname: document.getElementById("surname").value,
+        nationality: document.getElementById("nationality").value,
+        surname_letters: document.getElementById("surname_letters").value
+    };
+
+    console.log(player);
+
+    try {
+        const response = await fetch("http://localhost:3000/players", {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(player)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        let res = await response.json();
+        console.log(res);
+        location.reload();
+        document.getElementById("formPlayer").reset();  // Clear the form
+    } catch (error) {
+        console.error('Error adding new player:', error);
+    }
+}
+
+async function deletePlayer(id) {
+    const response = await fetch("http://localhost:3000/players", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id_player: id })
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+
+async function updatePlayer(id) {
+    const data = {
+        id_player: id,
+        surname: document.getElementById("surname-" + id).value,
+        nationality: document.getElementById("nationality-" + id).value,
+        surname_letters: document.getElementById("surname_letters-" + id).value
+    };
+
+    console.log(JSON.stringify(data));
+
+    const response = await fetch("http://localhost:3000/players", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
