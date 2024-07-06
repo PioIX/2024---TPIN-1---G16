@@ -579,8 +579,23 @@ app.delete('/stadiums', async function (req, res) {
     }
 });
 
+function getElevenLineUp(positions){
+    
+}
+
 // HEAD: ELEVENS
 app.get('/elevens', async function (req, res) {
+    try {
+        const response = await MySQL.makeQuery("SELECT position FROM Elevens;");
+        console.log(response)
+        res.send("ok")
+        return;
+    }
+    catch(error){
+        console.error('Error retrieving elevens:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while retrieving elevens." });
+    }
+    
     try {
         const response = await MySQL.makeQuery("SELECT * FROM Elevens;");
         res.send(response);
