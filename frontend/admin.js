@@ -600,3 +600,245 @@ async function updateStadium(id) {
     location.reload();
 }
 
+async function getAllFromElevens() {
+    const response = await fetch("http://localhost:3000/elevens", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    function drawTable(x) {
+        const eleven = result[x];
+        document.getElementById("table-elevens").innerHTML += `
+        <table id="eleven-table-${String(eleven.id_player) + String(eleven.id_team)}">
+            <tr>
+                <th>Categoria</th>
+                <th>Valor Actual</th>
+                <th>Nuevo Valor</th>
+            </tr>
+            <tr>
+                <td>Player ID:</td>
+                <td>${eleven.id_player}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Team ID:</td>
+                <td>${eleven.id_team}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Shirt Number:</td>
+                <td>${eleven.shirt_number}</td>
+                <td><input type="number" id="eleven-shirt_number-${String(eleven.id_player) + String(eleven.id_team)}" value="${eleven.shirt_number}"></td>
+            </tr>
+            <tr>
+                <td>Position:</td>
+                <td>${eleven.position}</td>
+                <td><input type="text" id="eleven-position-${String(eleven.id_player) + String(eleven.id_team)}" value="${eleven.position}"></td>
+            </tr>
+            <tr>
+                <td>Match:</td>
+                <td>${eleven.id_match}</td>
+                <td><input type="number" id="eleven-match-${String(eleven.id_player) + String(eleven.id_team)}" value="${eleven.id_match}"></td>
+            </tr>
+        </table>
+        <button onclick="deleteEleven(${String(eleven.id_player)}, ${String(eleven.id_team)})">Eliminar Eleven</button>
+        <button onclick="updateEleven(${String(eleven.id_player)}, ${String(eleven.id_team)})">Actualizar Eleven</button>
+        <br>`;
+    }
+
+    for (let i = 0; i < result.length; i++) {
+        drawTable(i);
+    }
+}
+
+async function addNewEleven() {
+    const eleven = {
+        id_player: document.getElementById("eleven-player").value,
+        id_team: document.getElementById("eleven-team").value,
+        shirt_number: document.getElementById("eleven-shirt_number").value,
+        position: document.getElementById("eleven-position").value,
+        id_match: document.getElementById("eleven-match").value
+    };
+
+    console.log(eleven);
+
+    try {
+        const response = await fetch("http://localhost:3000/elevens", {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(eleven)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        let res = await response.json();
+        console.log(res);
+        location.reload();
+        document.getElementById("formEleven").reset();  // Limpia el formulario
+    } catch (error) {
+        console.error('Error adding new stadium:', error);
+    }
+}
+
+async function deleteEleven(id_player, id_team) {
+    const response = await fetch("http://localhost:3000/elevens", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id_player: id_player, id_team: id_team })
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+
+async function updateEleven(id_player, id_team) {
+    console.log(`eleven-position-${id_player}${id_team}`)
+    const data = {
+        id_player: id_player,
+        id_team: id_team,
+        position: document.getElementById("eleven-position-" + id_player + id_team).value,
+        shirt_number: document.getElementById("eleven-shirt_number-" + id_player + id_team).value,
+        id_match: document.getElementById("eleven-match-" + id_player + id_team).value
+    };
+
+    console.log(JSON.stringify(data));
+
+    const response = await fetch("http://localhost:3000/elevens", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+
+async function getAllFromTeamsByLeagues() {
+    const response = await fetch("http://localhost:3000/teams-by-leagues", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    function drawTable(x) {
+        const teamByLeague = result[x];
+        document.getElementById("table-teams-by-leagues").innerHTML += `
+        <table id="teams-by-leagues-table-${String(teamByLeague.id_league) + String(teamByLeague.id_team)}">
+            <tr>
+                <th>Categoria</th>
+                <th>Valor Actual</th>
+                <th>Nuevo Valor</th>
+            </tr>
+            <tr>
+                <td>League ID:</td>
+                <td>${teamByLeague.id_league}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Team ID:</td>
+                <td>${teamByLeague.id_team}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Team Number:</td>
+                <td>${teamByLeague.team_number}</td>
+                <td><input type="number" id="teams-by-leagues-team_number-${String(teamByLeague.id_league) + String(teamByLeague.id_team)}" value="${teamByLeague.team_number}"></td>
+            </tr>
+        </table>
+        <button onclick="deleteTeamByLeague(${String(teamByLeague.id_league)}, ${String(teamByLeague.id_team)})">Eliminar Team By League</button>
+        <button onclick="updateTeamByLeague(${String(teamByLeague.id_league)}, ${String(teamByLeague.id_team)})">Actualizar Team By League</button>
+        <br>`;
+    }
+
+    for (let i = 0; i < result.length; i++) {
+        drawTable(i);
+    }
+}
+
+async function addNewTeamByLeague() {
+    const teamByLeague = {
+        id_league: document.getElementById("teamsByLeagues-league").value,
+        id_team: document.getElementById("teamsByLeagues-team").value,
+        team_number: document.getElementById("teamsByLeagues-team_number").value
+    };
+
+    console.log(teamByLeague);
+
+    try {
+        const response = await fetch("http://localhost:3000/teams-by-leagues", {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(teamByLeague)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        let res = await response.json();
+        console.log(res);
+        location.reload();
+        document.getElementById("formTeamsByLeagues").reset();  // Limpia el formulario
+    } catch (error) {
+        console.error('Error adding new team by league:', error);
+    }
+}
+
+async function deleteTeamByLeague(id_league, id_team) {
+    const response = await fetch("http://localhost:3000/teams-by-leagues", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id_league: id_league, id_team: id_team })
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
+
+async function updateTeamByLeague(id_league, id_team) {
+    const data = {
+        id_league: id_league,
+        id_team: id_team,
+        team_number: document.getElementById("teams-by-leagues-team_number-" + id_league + id_team).value
+    };
+
+    console.log(JSON.stringify(data));
+
+    const response = await fetch("http://localhost:3000/teams-by-leagues", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    let res = await response.json();
+    console.log(res);
+    location.reload();
+}
