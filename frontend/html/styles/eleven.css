@@ -1,0 +1,114 @@
+/* General */
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+header {
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+    background: #f9efdb;
+    font-size: 2em;
+    height: 3em;
+    gap: 1%;
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+header img {
+    margin-top: -0.5%;
+}
+h2 {
+    margin-left: 2%;
+}
+
+article {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 6em); /* Adjust for header and footer */
+    background-image: url("../images/fondo3.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+footer {
+    background: #f9efdb;
+    height: 3em;
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Players layout */
+.players {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px; /* Adjust as needed */
+}
+
+/* Players column */
+.players-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    padding: 10px; /* Adjust as needed */
+}
+
+/* Player style */
+.player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10vw; /* Adjust as needed */
+    height: 10vw; /* Adjust as needed */
+    max-width: 80px; /* Ensure player boxes are not too large */
+    max-height: 80px; /* Ensure player boxes are not too large */
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    margin: 5px 0;
+    text-align: center;
+    font-size: calc(1vw + 1vh); /* Adjust as needed */
+    background-image: url("../images/football-shirt.png"); /* Replace with the actual image path */
+    background-size: cover;
+    background-position: center;
+}
+
+/* Hide empty players */
+.player:empty {
+    display: none;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .player {
+        width: 15vw;
+        height: 15vw;
+    }
+}
