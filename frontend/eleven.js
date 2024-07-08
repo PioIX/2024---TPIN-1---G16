@@ -4,10 +4,9 @@ let currentGuess = [];
 let nextLetter = 0;
 let rightGuessString = "armani"
 let surname_letters = undefined
-let num = undefined
 
-async function getPlayerInfo(number){
-    const response = await fetch("http://localhost:3000/elevens", {
+async function getPlayerInfo(id_player){
+    const response = await fetch(`http://localhost:3000/elevens?id_player=${id_player}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -15,7 +14,7 @@ async function getPlayerInfo(number){
     });
 
     const result = await response.json();
-    return result[number]
+    return result
 }
 
 async function getElevenLineUp(id_match){
@@ -27,10 +26,13 @@ async function getElevenLineUp(id_match){
     });
 
     const result = await response.json();
-    console.log(result)
+    return result
 }
 
-function startGame(lineup){
+async function startGame(id, num){
+    const lineup = String(await getElevenLineUp(id))
+    
+
     const article = document.getElementsByTagName("article")[0]
 
     article.innerHTML += `<div class="players"> </div>`
@@ -40,31 +42,13 @@ function startGame(lineup){
         players.innerHTML += `<div class="players-column"></div>`
         for (let j = 0; j < lineup[i]; j++){
             const column = document.getElementsByClassName("players-column")[i]
-            let playerInfo = getPlayerInfo()
-            column.innerHTML += `<div class="player" onclick="initBoard(3, 6), screenWordle(3)">GK</div>`
+            let playerInfo = await getPlayerInfo(num)
+            playerInfo = playerInfo[0]
+            // console.log("info: ", playerInfo)
+            column.innerHTML += `<div id="player${playerInfo.id_player}" class="player" onclick="initBoard(${playerInfo.id_player}, ${playerInfo.surname_letters}), screenWordle(${playerInfo.id_player})">${playerInfo.position}</div>`
+            num++
         }
     }
-            
-            // <div class="players-column">
-            //     <div class="player" onclick="initBoard(7, 6), screenWordle(7)">LB</div>
-            //     <div class="player" onclick="initBoard(9, 0), screenWordle(9)">CB</div>
-            //     <div class="player" onclick="initBoard(11, 0), screenWordle(11)">CB</div>
-            //     <div class="player" onclick="initBoard(13, 0), screenWordle(13)">RB</div>
-            // </div>
-            // <div class="players-column">
-            //     <div class="player" onclick="initBoard(17, 0), screenWordle(17)">CDM</div>
-            // </div>
-            // <div class="players-column">
-            //     <div class="player" onclick="initBoard(22, 0), screenWordle(22)">CM</div>
-            //     <div class="player" onclick="initBoard(24, 0), screenWordle(24)">CM</div>
-            // </div>
-            // <div class="players-column">
-            //     <div class="player" onclick="initBoard(30, 0), screenWordle(30)">CAM</div>
-            // </div>
-            // <div class="players-column">
-            //     <div class="player" onclick="initBoard(36, 0), screenWordle(36)">CF</div>
-            //     <div class="player" onclick="initBoard(38, 0), screenWordle(38)">CF</div>
-            // </div>
         
 }
 
@@ -84,10 +68,9 @@ function screenWordle(number){
         board.style.display = "none";
         keyboard.style.display = "none";
         button.style.display = "none";
+        num = undefined
     }
 }
-
-console.log(rightGuessString)
 
 function initBoard(number, letters) {
    surname_letters = letters
@@ -177,7 +160,7 @@ function shadeKeyBoard(letter, color) {
 }
 
 function deleteLetter () {
-    let row = document.getElementsById(`letter-row${num}`)[6 - guessesRemaining]
+    let row = document.getElementsByClassName(`letter-row${num}`)[6 - guessesRemaining]
     let box = row.children[nextLetter - 1]
     box.textContent = ""
     box.classList.remove("filled-box")

@@ -625,12 +625,26 @@ function getElevenLineUp(positions){
 
 // HEAD: ELEVENS
 app.get('/elevens', async function (req, res) {
+    if (req.query.id_player != undefined){
+        try {
+            const response = await MySQL.makeQuery(`SELECT surname, surname_letters, position FROM Elevens INNER JOIN Players ON Elevens.id_player = Players.id_player WHERE Elevens.id_player = ${req.query.id_player}`)
+            console.log(response)
+            res.send(response)
+            return;
+        }
+        catch(error){
+            console.error('Error retrieving elevens:', error);
+            res.status(500).send({ status: "error", message: "An error occurred while retrieving elevens." });
+        }
+    }
+    
     if (req.query.id_match != undefined){
         try {
             let query = await MySQL.makeQuery(`SELECT position FROM Elevens WHERE id_match = "${req.query.id_match}"`)
             const response = getElevenLineUp(query);
             console.log(response)
             res.send(response)
+            return;
         }
         catch(error){
             console.error('Error retrieving elevens:', error);
