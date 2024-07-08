@@ -591,7 +591,6 @@ function getElevenLineUp(positions){
 
     for (let i = 0; i < positions.length; i++){
         let position = positions[i].position
-        console.log(position)
         if(position[0] == "G"){
             goalkeepers++
         }
@@ -628,7 +627,7 @@ app.get('/elevens', async function (req, res) {
     if (req.query.id_player != undefined){
         try {
             const response = await MySQL.makeQuery(`SELECT Elevens.id_player, surname, surname_letters, position FROM Elevens INNER JOIN Players ON Elevens.id_player = Players.id_player WHERE Elevens.id_player = ${req.query.id_player}`)
-            console.log(response)
+            console.log("response: ", response)
             res.send(response)
             return;
         }
@@ -654,6 +653,7 @@ app.get('/elevens', async function (req, res) {
     
     try {
         const response = await MySQL.makeQuery("SELECT * FROM Elevens;");
+        console.log(response)
         res.send(response);
     } catch (error) {
         console.error('Error retrieving elevens:', error);

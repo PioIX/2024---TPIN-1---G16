@@ -1,319 +1,349 @@
-const NUMBER_OF_GUESSES = 6;
-let guessesRemaining = NUMBER_OF_GUESSES;
-let currentGuess = [];
-let nextLetter = 0;
-let rightGuessString = "montiel"
-let surname_letters = undefined
-let num = 2
-let currentBoard = undefined
-
-async function getPlayerInfo(id_player){
-    const response = await fetch(`http://localhost:3000/elevens?id_player=${id_player}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
-
-    const result = await response.json();
-    return result
-}
-
-async function getElevenLineUp(id_match){
-    const response = await fetch(`http://localhost:3000/elevens?id_match=${id_match}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
-
-    const result = await response.json();
-    return result
-}
-
-async function startGame(id, num){
-    const lineup = String(await getElevenLineUp(id))
-    
-
-    const article = document.getElementsByTagName("article")[0]
-
-    article.innerHTML += `<div class="players"></div>`
-
-    const players = document.getElementsByClassName("players")[0]
-    for (let i = 0; i < lineup.length; i++){
-        players.innerHTML += `<div class="players-column"></div>`
-        for (let j = 0; j < lineup[i]; j++){
-            const column = document.getElementsByClassName("players-column")[i]
-            let playerInfo = await getPlayerInfo(num)
-            playerInfo = playerInfo[0]
-            console.log("info: ", playerInfo)
-            column.innerHTML += `<div id="player${playerInfo.id_player}" class="player" onclick="initBoard(${playerInfo.id_player}, ${playerInfo.surname_letters}), screenWordle(${playerInfo.id_player}, ${playerInfo.surname_letters})">${playerInfo.position}</div>`
-            num++
-        }
-    }
-        
-}
-
-function screenWordle(number, surname_letters){
-    const players = document.getElementsByClassName("inicio")[0];
-    const board = document.getElementById(`game-board${number}`);
-    const keyboard = document.getElementById(`keyboard-cont${number}`);
-    const button = document.getElementById(`button${number}`);
-    if (players.style.display != "none") {
-        players.style.display = "none";
-        board.style.display = "";
-        keyboard.style.display = "";
-        button.style.display = "";
-        num = number
-        surname_letters = surname_letters
-    } else {
-        players.style.display = "";
-        board.style.display = "none";
-        keyboard.style.display = "none";
-        button.style.display = "none";
+class Player {
+    constructor(id_player, surname, position, surname_letters) {
+        this.id_player = id_player;
+        this.surname = surname;
+        this.position = position;
+        this.surname_letters = surname_letters;
     }
 }
 
-function initBoard(number, letters) {
-    let body = document.getElementsByTagName(`body`)[0];
-
-    console.log("initBoard: ", letters)
-
-    body.innerHTML += `
-   
-    <div id="game-board${number}" class="game-board" style="display: none;">
-
-    </div>
-
-    <div id="keyboard-cont${number}" class="keyboard-cont" style="display: none;">
-        <div id="first-row${number}" class="first-row">
-            <button class="keyboard-button keyboard-button${number}">q</button>
-            <button class="keyboard-button keyboard-button${number}">w</button>
-            <button class="keyboard-button">e</button>
-            <button class="keyboard-button keyboard-button${number}">r</button>
-            <button class="keyboard-button keyboard-button${number}">t</button>
-            <button class="keyboard-button keyboard-button${number}">y</button>
-            <button class="keyboard-button keyboard-button${number}">u</button>
-            <button class="keyboard-button keyboard-button${number}">i</button>
-            <button class="keyboard-button keyboard-button${number}">o</button>
-            <button class="keyboard-button keyboard-button${number}">p</button>
-        </div>
-        <div id="second-row${number}" class="second-row">
-            <button class="keyboard-button keyboard-button${number}">a</button>
-            <button class="keyboard-button keyboard-button${number}">s</button>
-            <button class="keyboard-button keyboard-button${number}">d</button>
-            <button class="keyboard-button keyboard-button${number}">f</button>
-            <button class="keyboard-button keyboard-button${number}">g</button>
-            <button class="keyboard-button keyboard-button${number}">h</button>
-            <button class="keyboard-button keyboard-button${number}">j</button>
-            <button class="keyboard-button keyboard-button${number}">k</button>
-            <button class="keyboard-button keyboard-button${number}">l</button>
-        </div>
-        <div id="third-row${number}" class="third-row">
-            <button class="keyboard-button keyboard-button${number}">Del</button>
-            <button class="keyboard-button keyboard-button${number}">z</button>
-            <button class="keyboard-button keyboard-button${number}">x</button>
-            <button class="keyboard-button keyboard-button${number}">c</button>
-            <button class="keyboard-button keyboard-button${number}">v</button>
-            <button class="keyboard-button keyboard-button${number}">b</button>
-            <button class="keyboard-button keyboard-button${number}">n</button>
-            <button class="keyboard-button keyboard-button${number}">m</button>
-            <button class="keyboard-button keyboard-button${number}">Enter</button>
-        </div>
-    </div>
-    <button id="button${number}" class="closeButton" onclick="screenWordle(${number})" style="display: none;">Cerrar</button>`
-    
-
-    let board = document.getElementById(`game-board${number}`)
-
-        if (document.getElementById(`game-board${number}`).firstElementChild == null){
-            for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-            let row = document.createElement("div")
-            row.className = `letter-row letter-row${number}`
-
-            for (let j = 0; j < letters; j++) {
-                let box = document.createElement("div")
-                box.className = `letter-box letter-box${number}`
-                row.appendChild(box)
-            }
-    
-            board.appendChild(row)
-        }
-    
+class Wordle {
+    constructor(player, numberOfGuesses = 6) {
+        this.player = player;
+        this.numberOfGuesses = numberOfGuesses;
+        this.guessesRemaining = numberOfGuesses;
+        this.currentGuess = [];
+        this.nextLetter = 0;
+        this.rightGuessString = player.surname.toLowerCase();
+        this.initEventListeners();
     }
-}
 
-function shadeKeyBoard(letter, color) {
-    for (const elem of document.getElementsByClassName("keyboard-button")) {
-        if (elem.textContent === letter) {
-            let oldColor = elem.style.backgroundColor
-            if (oldColor === 'green') {
-                return
-            } 
-
-            if (oldColor === 'yellow' && color !== 'green') {
-                return
+    initEventListeners() {
+        document.addEventListener("keyup", (e) => {
+            if (this.guessesRemaining === 0 || document.querySelector(`.game-board[data-player-id="${this.player.id_player}"]`).style.display === "none") {
+                return;
             }
 
-            elem.style.backgroundColor = color
-            break
-        }
-    }
-}
+            let pressedKey = String(e.key);
+            if (pressedKey === "Backspace" && this.nextLetter !== 0) {
+                this.deleteLetter();
+                return;
+            }
 
-function deleteLetter () {
-    let row = document.getElementsByClassName(`letter-row${num}`)[6 - guessesRemaining]
-    let box = row.children[nextLetter - 1]
-    box.textContent = ""
-    box.classList.remove("filled-box")
-    currentGuess.pop()
-    nextLetter -= 1
-}
+            if (pressedKey === "Enter") {
+                this.checkGuess();
+                return;
+            }
 
-function checkGuess (rightGuessString, letters) {
-    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
-    let guessString = ''
-    let rightGuess = Array.from(rightGuessString)
-
-    for (const val of currentGuess) {
-        guessString += val
-    }
-
-    if (guessString.length != letters) {
-        toastr.error("Not enough letters!")
-        return
-    }
-
-    
-    for (let i = 0; i < letters; i++) {
-        let letterColor = ''
-        let box = row.children[i]
-        let letter = currentGuess[i]
-        
-        let letterPosition = rightGuess.indexOf(currentGuess[i])
-        // is letter in the correct guess
-        if (letterPosition === -1) {
-            letterColor = 'grey'
-        } else {
-            // now, letter is definitely in word
-            // if letter index and right guess index are the same
-            // letter is in the right position 
-            if (currentGuess[i] === rightGuess[i]) {
-                // shade green 
-                letterColor = 'green'
+            let found = pressedKey.match(/[a-z]/gi);
+            if (!found || found.length > 1) {
+                return;
             } else {
-                // shade box yellow
-                letterColor = 'yellow'
+                this.insertLetter(pressedKey);
+            }
+        });
+
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("keyboard-button") && e.target.closest(`.keyboard-cont[data-player-id="${this.player.id_player}"]`)) {
+                let key = e.target.textContent;
+
+                if (key === "Del") {
+                    key = "Backspace";
+                }
+
+                document.dispatchEvent(new KeyboardEvent("keyup", {'key': key}));
+            }
+        });
+    }
+
+    initBoard() {
+        // Verifica si el board ya existe antes de agregarlo
+        if (document.querySelector(`.game-board[data-player-id="${this.player.id_player}"]`)) {
+            return;
+        }
+        
+        // Verifica si el keyboard ya existe antes de agregarlo
+        if (document.querySelector(`.keyboard-cont[data-player-id="${this.player.id_player}"]`)) {
+            return;
+        }
+
+        let article = document.querySelector('article');
+        article.innerHTML += `
+            <div class="game-board" data-player-id="${this.player.id_player}">
+            </div>
+            <div class="keyboard-cont" data-player-id="${this.player.id_player}">
+                <div class="first-row">
+                    <button class="keyboard-button">q</button>
+                    <button class="keyboard-button">w</button>
+                    <button class="keyboard-button">e</button>
+                    <button class="keyboard-button">r</button>
+                    <button class="keyboard-button">t</button>
+                    <button class="keyboard-button">y</button>
+                    <button class="keyboard-button">u</button>
+                    <button class="keyboard-button">i</button>
+                    <button class="keyboard-button">o</button>
+                    <button class="keyboard-button">p</button>
+                </div>
+                <div class="second-row">
+                    <button class="keyboard-button">a</button>
+                    <button class="keyboard-button">s</button>
+                    <button class="keyboard-button">d</button>
+                    <button class="keyboard-button">f</button>
+                    <button class="keyboard-button">g</button>
+                    <button class="keyboard-button">h</button>
+                    <button class="keyboard-button">j</button>
+                    <button class="keyboard-button">k</button>
+                    <button class="keyboard-button">l</button>
+                </div>
+                <div class="third-row">
+                    <button class="keyboard-button">Del</button>
+                    <button class="keyboard-button">z</button>
+                    <button class="keyboard-button">x</button>
+                    <button class="keyboard-button">c</button>
+                    <button class="keyboard-button">v</button>
+                    <button class="keyboard-button">b</button>
+                    <button class="keyboard-button">n</button>
+                    <button class="keyboard-button">m</button>
+                    <button class="keyboard-button">Enter</button>
+                </div>
+            </div>
+            <button class="closeButton" data-player-id="${this.player.id_player}" onclick="game.toggleWordle(${this.player.id_player})">Cerrar</button>
+        `;
+
+        let board = document.querySelector(`.game-board[data-player-id="${this.player.id_player}"]`);
+
+        for (let i = 0; i < this.numberOfGuesses; i++) {
+            let row = document.createElement("div");
+            row.className = `letter-row letter-row${this.player.id_player}`;
+
+            for (let j = 0; j < this.player.surname_letters; j++) {
+                let box = document.createElement("div");
+                box.className = `letter-box letter-box${this.player.id_player}`;
+                row.appendChild(box);
             }
 
-            rightGuess[letterPosition] = "#"
+            board.appendChild(row);
         }
-
-        let delay = 250 * i
-        setTimeout(()=> {
-            //flip box
-            animateCSS(box, 'flipInX')
-            //shade box
-            box.style.backgroundColor = letterColor
-            shadeKeyBoard(letter, letterColor)
-        }, delay)
     }
 
-    if (guessString === rightGuessString) {
-        toastr.success("You guessed right! Game over!")
-        guessesRemaining = 0
-        return
-    } else {
-        guessesRemaining -= 1;
-        currentGuess = [];
-        nextLetter = 0;
+    shadeKeyBoard(letter, color) {
+        for (const elem of document.querySelectorAll(`.keyboard-cont[data-player-id="${this.player.id_player}"] .keyboard-button`)) {
+            if (elem.textContent === letter) {
+                let oldColor = elem.style.backgroundColor;
+                if (oldColor === 'green') {
+                    return;
+                }
 
-        if (guessesRemaining === 0) {
-            toastr.error("You've run out of guesses! Game over!")
-            toastr.info(`The right word was: "${rightGuessString}"`)
+                if (oldColor === 'yellow' && color !== 'green') {
+                    return;
+                }
+
+                elem.style.backgroundColor = color;
+                break;
+            }
+        }
+    }
+
+    deleteLetter() {
+        let row = document.querySelectorAll(`.letter-row${this.player.id_player}`)[this.numberOfGuesses - this.guessesRemaining];
+        let box = row.children[this.nextLetter - 1];
+        box.textContent = "";
+        box.classList.remove("filled-box");
+        this.currentGuess.pop();
+        this.nextLetter -= 1;
+    }
+
+    checkGuess() {
+        let row = document.querySelectorAll(`.letter-row${this.player.id_player}`)[this.numberOfGuesses - this.guessesRemaining];
+        let guessString = '';
+        let rightGuess = Array.from(this.rightGuessString);
+
+        for (const val of this.currentGuess) {
+            guessString += val;
+        }
+
+        if (guessString.length !== this.player.surname_letters) {
+            toastr.error("Not enough letters!");
+            return;
+        }
+
+        for (let i = 0; i < this.player.surname_letters; i++) {
+            let letterColor = '';
+            let box = row.children[i];
+            let letter = this.currentGuess[i];
+
+            let letterPosition = rightGuess.indexOf(this.currentGuess[i]);
+            if (letterPosition === -1) {
+                letterColor = 'grey';
+            } else {
+                if (this.currentGuess[i] === rightGuess[i]) {
+                    letterColor = 'green';
+                } else {
+                    letterColor = 'yellow';
+                }
+
+                rightGuess[letterPosition] = "#";
+            }
+
+            let delay = 250 * i;
+            setTimeout(() => {
+                animateCSS(box, 'flipInX');
+                box.style.backgroundColor = letterColor;
+                this.shadeKeyBoard(letter, letterColor);
+            }, delay);
+        }
+
+        if (guessString === this.rightGuessString) {
+            toastr.success("You guessed right! Game over!");
+            this.guessesRemaining = 0;
+            return;
+        } else {
+            this.guessesRemaining -= 1;
+            this.currentGuess = [];
+            this.nextLetter = 0;
+
+            if (this.guessesRemaining === 0) {
+                toastr.error("You've run out of guesses! Game over!");
+                toastr.info(`The right word was: "${this.rightGuessString}"`);
+            }
+        }
+    }
+
+    insertLetter(pressedKey) {
+        if (this.nextLetter === this.player.surname_letters) {
+            return;
+        }
+        pressedKey = pressedKey.toLowerCase();
+
+        let row = document.querySelectorAll(`.letter-row${this.player.id_player}`)[this.numberOfGuesses - this.guessesRemaining];
+        let box = row.children[this.nextLetter];
+        animateCSS(box, "pulse");
+        box.textContent = pressedKey;
+        box.classList.add("filled-box");
+        this.currentGuess.push(pressedKey);
+        this.nextLetter += 1;
+    }
+}
+
+class Game {
+    constructor() {
+        this.players = [];
+    }
+
+    async getPlayerInfo(id_player) {
+        try {
+            const response = await fetch(`http://localhost:3000/elevens?id_player=${id_player}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            console.log('Player Info:', result); // Imprime la respuesta para verificar
+            return result;
+        } catch (error) {
+            console.error('Error fetching player info:', error);
+            return undefined;
+        }
+    }
+
+    async getElevenLineUp(id_match) {
+        const response = await fetch(`http://localhost:3000/elevens?id_match=${id_match}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const result = await response.json();
+        console.log(result)
+        return result;
+    }
+
+    async startGame(id_match, num) {
+        const lineup = String(await this.getElevenLineUp(id_match));
+        console.log('Lineup:', lineup); // Imprime la alineación para verificar
+    
+        const article = document.querySelector("article");
+        article.innerHTML = `<div class="players"></div>`;
+        const playersContainer = document.querySelector(".players");
+    
+        for (let i = 0; i < lineup.length; i++) {
+            playersContainer.innerHTML += `<div class="players-column"></div>`;
+            for (let j = 0; j < lineup[i]; j++) {
+                const column = document.querySelectorAll(".players-column")[i];
+                let playerInfo = await this.getPlayerInfo(num);
+                console.log('Player Info Inside startGame:', playerInfo); // Imprime los datos del jugador para verificar
+                if (!playerInfo) {
+                    console.error('Player info is undefined');
+                    continue; // Salta al siguiente jugador si no se obtiene la información
+                }
+                playerInfo = playerInfo[0]; // Asegúrate de que el formato de playerInfo es correcto
+                let player = new Player(playerInfo.id_player, playerInfo.surname, playerInfo.position, playerInfo.surname_letters);
+                this.players.push(player);
+                column.innerHTML += `<div id="player${player.id_player}" class="player" onclick="game.initBoard(${player.id_player}), game.toggleWordle(${player.id_player})">${player.position}</div>`;
+                num++;
+            }
+        }
+    }
+    
+
+    initBoard(id_player) {
+        const player = this.players.find(p => p.id_player === id_player);
+        if (player) {
+            // Verifica si el Wordle ya ha sido creado para este jugador
+            if (this[`wordle${id_player}`]) {
+                return;
+            }
+            const wordle = new Wordle(player);
+            wordle.initBoard();
+            this[`wordle${id_player}`] = wordle;
+        }
+    }
+
+    toggleWordle(id_player) {
+        const playersDiv = document.querySelector(".players");
+        const board = document.querySelector(`.game-board[data-player-id="${id_player}"]`);
+        const keyboard = document.querySelector(`.keyboard-cont[data-player-id="${id_player}"]`);
+        const button = document.querySelector(`.closeButton[data-player-id="${id_player}"]`);
+
+        if (playersDiv.style.display !== "none") {
+            playersDiv.style.display = "none";
+            board.style.display = "";
+            keyboard.style.display = "";
+            button.style.display = "";
+        } else {
+            playersDiv.style.display = "";
+            board.style.display = "none";
+            keyboard.style.display = "none";
+            button.style.display = "none";
         }
     }
 }
 
-function insertLetter (pressedKey, letters) {
-    console.log("hola")
-    if (nextLetter === letters) {
-        return
-    }
-    pressedKey = pressedKey.toLowerCase()
-
-    let row = document.getElementsByClassName(`letter-row${num}`)[6 - guessesRemaining]
-    let box = row.children[nextLetter]
-    animateCSS(box, "pulse")
-    box.textContent = pressedKey
-    box.classList.add("filled-box")
-    currentGuess.push(pressedKey)
-    nextLetter += 1
-}
+const game = new Game();
 
 const animateCSS = (element, animation, prefix = 'animate__') =>
-  // We create a Promise and return it
-  new Promise((resolve, reject) => {
-    const animationName = `${prefix}${animation}`;
-    // const node = document.querySelector(element);
-    const node = element
-    node.style.setProperty('--animate-duration', '0.3s');
-    
-    node.classList.add(`${prefix}animated`, animationName);
+    new Promise((resolve, reject) => {
+        const animationName = `${prefix}${animation}`;
+        const node = element;
+        node.style.setProperty('--animate-duration', '0.3s');
+        node.classList.add(`${prefix}animated`, animationName);
 
-    // When the animation ends, we clean the classes and resolve the Promise
-    function handleAnimationEnd(event) {
-      event.stopPropagation();
-      node.classList.remove(`${prefix}animated`, animationName);
-      resolve('Animation ended');
-    }
-
-    node.addEventListener('animationend', handleAnimationEnd, {once: true});
-});
-
-document.addEventListener("keyup", (e) => {
-
-    if (guessesRemaining === 0) {
-        return
-    }
-
-    let pressedKey = String(e.key)
-    if (pressedKey === "Backspace" && nextLetter !== 0) {
-        deleteLetter()
-        return
-    }
-
-    if (pressedKey === "Enter") {
-        checkGuess(rightGuessString, surname_letters)
-        return
-    }
-
-    let found = pressedKey.match(/[a-z]/gi)
-    if (!found || found.length > 1) {
-        return
-    } else {
-        if (surname_letters != undefined){
-        insertLetter(pressedKey, surname_letters)
+        function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove(`${prefix}animated`, animationName);
+            resolve('Animation ended');
         }
-    }
-})
 
-const keyboards = document.getElementsByClassName("keyboard-cont")
+        node.addEventListener('animationend', handleAnimationEnd, { once: true });
+    });
 
-for (let i = 0; i < keyboards.length; i++){
-    keyboards[i].addEventListener("click", (e) => {
-        const target = e.target
-        
-        if (!target.classList.contains("keyboard-button")) {
-            return
-        }
-        let key = target.textContent
-    
-        if (key === "Del") {
-            key = "Backspace"
-        } 
-    
-        document.dispatchEvent(new KeyboardEvent("keyup", {'key': key}))
-    })
+async function startGame(id_match, num) {
+    await game.startGame(id_match, num); // Inicia el juego con los parámetros deseados
 }
-
