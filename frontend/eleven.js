@@ -2,8 +2,10 @@ const NUMBER_OF_GUESSES = 6;
 let guessesRemaining = NUMBER_OF_GUESSES;
 let currentGuess = [];
 let nextLetter = 0;
-let rightGuessString = "armani"
+let rightGuessString = "montiel"
 let surname_letters = undefined
+let num = 2
+let currentBoard = undefined
 
 async function getPlayerInfo(id_player){
     const response = await fetch(`http://localhost:3000/elevens?id_player=${id_player}`, {
@@ -35,7 +37,7 @@ async function startGame(id, num){
 
     const article = document.getElementsByTagName("article")[0]
 
-    article.innerHTML += `<div class="players"> </div>`
+    article.innerHTML += `<div class="players"></div>`
 
     const players = document.getElementsByClassName("players")[0]
     for (let i = 0; i < lineup.length; i++){
@@ -44,15 +46,15 @@ async function startGame(id, num){
             const column = document.getElementsByClassName("players-column")[i]
             let playerInfo = await getPlayerInfo(num)
             playerInfo = playerInfo[0]
-            // console.log("info: ", playerInfo)
-            column.innerHTML += `<div id="player${playerInfo.id_player}" class="player" onclick="initBoard(${playerInfo.id_player}, ${playerInfo.surname_letters}), screenWordle(${playerInfo.id_player})">${playerInfo.position}</div>`
+            console.log("info: ", playerInfo)
+            column.innerHTML += `<div id="player${playerInfo.id_player}" class="player" onclick="initBoard(${playerInfo.id_player}, ${playerInfo.surname_letters}), screenWordle(${playerInfo.id_player}, ${playerInfo.surname_letters})">${playerInfo.position}</div>`
             num++
         }
     }
         
 }
 
-function screenWordle(number){
+function screenWordle(number, surname_letters){
     const players = document.getElementsByClassName("inicio")[0];
     const board = document.getElementById(`game-board${number}`);
     const keyboard = document.getElementById(`keyboard-cont${number}`);
@@ -63,19 +65,19 @@ function screenWordle(number){
         keyboard.style.display = "";
         button.style.display = "";
         num = number
+        surname_letters = surname_letters
     } else {
         players.style.display = "";
         board.style.display = "none";
         keyboard.style.display = "none";
         button.style.display = "none";
-        num = undefined
     }
 }
 
 function initBoard(number, letters) {
-   surname_letters = letters
-    
     let body = document.getElementsByTagName(`body`)[0];
+
+    console.log("initBoard: ", letters)
 
     body.innerHTML += `
    
@@ -234,12 +236,13 @@ function checkGuess (rightGuessString, letters) {
 }
 
 function insertLetter (pressedKey, letters) {
+    console.log("hola")
     if (nextLetter === letters) {
         return
     }
     pressedKey = pressedKey.toLowerCase()
 
-    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
+    let row = document.getElementsByClassName(`letter-row${num}`)[6 - guessesRemaining]
     let box = row.children[nextLetter]
     animateCSS(box, "pulse")
     box.textContent = pressedKey
@@ -281,7 +284,7 @@ document.addEventListener("keyup", (e) => {
     }
 
     if (pressedKey === "Enter") {
-        checkGuess(rightGuessString, 6)
+        checkGuess(rightGuessString, surname_letters)
         return
     }
 
