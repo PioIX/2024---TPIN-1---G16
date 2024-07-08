@@ -37,7 +37,7 @@ article {
     align-content: center;
     align-items: center;
     width: 100%;
-    height: calc(100% - 6em); /* Adjust for header and footer */
+    height: calc(100% - 12em); /* Adjust for header and footer */
     background-image: url("../images/fondo3.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -50,7 +50,7 @@ article {
 
 footer {
     background: #f9efdb;
-    height: 3em;
+    height: 6em;
     font-family: "Roboto", sans-serif;
     font-weight: 100;
     font-style: normal;
@@ -88,10 +88,8 @@ footer {
     align-items: center;
     width: 10vw; /* Adjust as needed */
     height: 10vw; /* Adjust as needed */
-    max-width: 80px; /* Ensure player boxes are not too large */
-    max-height: 80px; /* Ensure player boxes are not too large */
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+    max-width: 120px; /* Ensure player boxes are not too large */
+    max-height: 120px;
     margin: 5px 0;
     text-align: center;
     font-size: calc(1vw + 1vh); /* Adjust as needed */
@@ -110,5 +108,160 @@ footer {
     .player {
         width: 15vw;
         height: 15vw;
+    }
+}
+
+.wordle {
+    background-color: blue;
+    width: 100%;
+}
+
+.wordle .row {
+    display: grid;
+    gap: 5px;
+    grid-template-columns: 62px 62px 62px 62px 62px;
+    height: 62px;
+    margin-bottom: 5px;
+}
+
+.wordle .letter {
+    border: 1px solid var(--border-color);
+}
+
+.wordle .letter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+/* Keyboard */
+
+.keyboard {
+    margin: 50px auto 0;
+}
+
+.keyboard .row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.keyboard .letter,
+.keyboard .action {
+    align-items: center;
+    background-color: var(--keyboard-gray-light);
+    cursor: pointer;
+    display: flex;
+    font-size: 22px;
+    height: 58px;
+    justify-content: center;
+    transition: filter 0.2s;
+    width: 43px;
+}
+
+.keyboard .letter:hover,
+.keyboard .action:hover {
+    filter: brightness(0.8);
+}
+
+.keyboard .enter {
+    font-size: 17px;
+    width: 83px;
+}
+
+.play-again {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.btn-play-again {
+    background-color: var(--yellow);
+    border-radius: 10px;
+    color: var(--bg);
+    cursor: pointer;
+    display: none;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.game-board {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .letter-box {
+    border: 2px solid gray;
+    border-radius: 3px;
+    margin: 2px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    height: 3rem;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+  }
+  
+  .filled-box {
+    border: 2px solid black;
+  }
+  
+  .letter-row {
+    display: flex;
+  }
+  
+  .keyboard-cont {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #keyboard-cont div {
+    display: flex;
+  }
+  
+  .second-row {
+    margin: 0.5rem 0;
+  }
+  
+  .keyboard-button {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.5rem;
+    margin: 0 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+@media screen and (max-width: 414px) {
+    header {
+        justify-content: center;
+    }
+
+    .header {
+        height: 60px;
+    }
+
+    header img {
+        height: auto;
+        width: 40px;
+    }
+
+    .wordle {
+        margin-top: 30px;
+        width: 280px;
+    }
+
+    .wordle .row {
+        grid-template-columns: 52px 52px 52px 52px 52px;
+        height: 52px;
     }
 }

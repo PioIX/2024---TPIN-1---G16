@@ -580,20 +580,62 @@ app.delete('/stadiums', async function (req, res) {
 });
 
 function getElevenLineUp(positions){
+    let lineup = ""
+
+    let goalkeepers = 0
+    let defenders = 0
+    let defensiveMidfielders = 0
+    let midfielders = 0
+    let attackingMidfielders = 0
+    let forwards = 0
+
+    for (let i = 0; i < positions.length; i++){
+        let position = positions[i].position
+        console.log(position)
+        if(position[0] == "G"){
+            goalkeepers++
+        }
+        else if(position[1] == "B"){
+            defenders++
+        }
+        else if(position[1] == "D"){
+            defensiveMidfielders++
+        }
+        else if(position[1] == "M"){
+            midfielders++
+        }
+        else if(position[1] == "A"){
+            attackingMidfielders++
+        }
+        else if(position[1] == "F"){
+            forwards++
+        }
+    }
     
+    positionsArray = [goalkeepers, defenders, defensiveMidfielders, midfielders, attackingMidfielders, forwards]
+
+    for (let i = 0; i < positionsArray.length; i++){
+        if (positionsArray[i] != 0){
+            lineup += positionsArray[i]
+        }
+    }
+    
+    return lineup
 }
 
 // HEAD: ELEVENS
 app.get('/elevens', async function (req, res) {
-    try {
-        const response = await MySQL.makeQuery("SELECT position FROM Elevens;");
-        console.log(response)
-        res.send("ok")
-        return;
-    }
-    catch(error){
-        console.error('Error retrieving elevens:', error);
-        res.status(500).send({ status: "error", message: "An error occurred while retrieving elevens." });
+    if (req.query.id_match != undefined){
+        try {
+            let query = await MySQL.makeQuery(`SELECT position FROM Elevens WHERE id_match = "${req.query.id_match}"`)
+            const response = getElevenLineUp(query);
+            console.log(response)
+            res.send(response)
+        }
+        catch(error){
+            console.error('Error retrieving elevens:', error);
+            res.status(500).send({ status: "error", message: "An error occurred while retrieving elevens." });
+        }
     }
     
     try {
