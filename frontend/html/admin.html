@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html class="htmlAdmin" lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+        <link href="styles/styles.css" rel="stylesheet">
+        <title>Log In</title>
+    </head>
+    <body class="bodyAdmin">
+        <header>
+            <h2>Guess the 11</h2>
+            <img src="images/soccer-ball-variant.png" alt="Logo" title="Logo" style="width: 45px; height: 45px;">
+        </header>
+        <div id="adminMain">
+            <h1 id="crud">CRUD</h1>
+            <div id="divPrompts">
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromMatches()">Get all matches</button>
+                    <form id="formMatch">
+                        <div class="formPrompt">
+                            <label for="team"><b>Team</b></label>
+                            <input type="number" id="match-team" name="team">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="rivalTeam"><b>Rival Team</b></label>
+                            <input type="text" id="match-rivalTeam" name="rivalTeam">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="result"><b>Result</b></label>
+                            <input type="text" id="match-result" name="result">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="date"><b>Date</b></label>
+                            <input type="text" id="match-date" name="date">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="stadium"><b>Stadium</b></label>
+                            <input type="number" id="match-stadium" name="stadium">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="league"><b>League</b></label>
+                            <input type="number" id="match-league" name="league">
+                        </div>
+                    </form>
+                    <input type="submit" class="inputSubmit" onclick="addNewMatch()"><br>
+                    <div id="table-matches"></div>
+                </div>
+
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromPlayers()">Get all players</button>
+                    <form id="formPlayer">
+                        <div class="formPrompt">
+                            <label for="surname"><b>Surname</b></label>
+                            <input type="text" id="player-surname" name="surname">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="nationality"><b>Nationality</b></label>
+                            <input type="text" id="player-nationality" name="nationality">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="surname_letters"><b>Surname Letters</b></label>
+                            <input type="number" id="player-surname_letters" name="surname_letters">
+                        </div>
+                        
+                    </form>
+                    <input type="submit" class="inputSubmit" onclick="addNewPlayer()">
+                    <div id="table-players"></div>
+                </div>
+
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromTeams()">Get all teams</button>
+                    <form id="formTeam">
+                        <div class="formPrompt">
+                            <label for="name"><b>Name</b></label>
+                            <input type="text" id="team-name" name="name">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="country"><b>Country</b></label>
+                            <input type="text" id="team-country" name="country">
+                        </div>
+                    </form>
+                    <input type="submit"class="inputSubmit" onclick="addNewTeam()">
+                    <div id="table-teams"></div>
+                </div>
+
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromLeagues()">Get all leagues</button>
+                    <form id="formLeague">
+                        <div class="formPrompt">
+                            <label for="name"><b>Name</b></label>
+                            <input type="text" id="league-name" name="name">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="country"><b>Country</b></label>
+                            <input type="text" id="league-country" name="country">
+                        </div>
+                    </form>
+                    <input type="submit" class="inputSubmit" onclick="addNewLeague()">
+                    <div id="table-leagues"></div>
+                </div>
+
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromStadiums()">Get all stadiums</button>
+                    <form id="formStadium">
+                        <div class="formPrompt">
+                            <label for="name"><b>Name</b></label>
+                            <input type="text" id="stadium-name" name="name">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="city"><b>City</b></label>
+                            <input type="text" id="stadium-city" name="city">
+                        </div>
+                    </form>
+                    <input type="submit" class="inputSubmit" onclick="addNewStadium()">
+                    <div id="table-stadiums"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footerAdmin">
+            © 2024. The Guess The Eleven Game.
+        </footer>
+        <script src="../functions.js"></script>
+        <script src="../admin.js"></script>
+    </body>
+</html>
