@@ -4,27 +4,22 @@
     box-sizing: border-box;
 }
 
-.htmlNormal{
+html{
+    height: 100%;
     width: 100%;
+}
+
+body{
     height: 100%;
 }
-.htmlAdmin{
-    width: 100%;
-}
-body{
-    height: 80%;
-    background-image: url("../images/fondo3.jpg");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: 100% 100%;
-}
+
 header{
+    text-align: left;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
-    text-align: left;
     background: #f9efdb;
     font-size: 2em;
     height: 3em;
@@ -40,32 +35,31 @@ h2{
     margin-left: 2%;
 }   
 
-#main{
+article{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-content: center;
     align-items: center;
-    text-align: center;
+    width: 100%;
+    height: 100%;
+    background-image: url("../images/fondo3.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
     font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-style: normal;
-    width: 100%;
-    height: 100%;
 }
 
-.footerNormal{
-    position: fixed;
-    bottom: 0;
+footer{
     background: #f9efdb;
-    height: 4.5em;
+    height: 3em;
     font-family: "Roboto", sans-serif;
     font-weight: 100;
     font-style: normal;
     text-align: center;
     align-items: center;
     align-content: center;
-    width: 100%;
 }
 
 input {
@@ -76,17 +70,18 @@ input {
 /*login.html*/
 #containerForm{
     background-color: white;
-    width: 60%;
+    width: calc(100vw - 70vh);
+    width: calc(100vw - 70vh);
+    padding: 50px;
     border-style:solid;
     border-radius: 15px;
     border-width: 2px;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
-    padding: 3%;
 }
 
 #containerForm h1{
@@ -123,7 +118,8 @@ button {
 /*register.html*/
 #registerDiv{
     background-color: white;
-    width: calc(30% + 50%);
+    width: calc(100vw - 70vh);
+    width: calc(100vw - 70vh);
     padding: 50px;
     border-style:solid;
     border-radius: 15px;
@@ -134,7 +130,6 @@ button {
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
-    padding: 3%;
 }
 #registerDiv h1{
     font-size: calc(4vw + 4vh);
@@ -151,108 +146,4 @@ button {
     justify-content: space-around;
     gap: 1%;
     font-size: calc(1.2vw + 1.2vh);
-}
-/*admin.html*/
-.bodyAdmin{
-    background: none;
-}
-.getAll{
-    width: 30%;
-    border-style: solid;
-    border-radius: 50px;
-    border-width: 1px;
-    font-family: "Roboto", sans-serif;
-    box-shadow: 0 4px 15px rgba(2, 2, 2, 0.5); /* Shadow effect */
-    font-weight: 900;
-    font-style: normal;
-}
-#adminMain{
-    padding: 50px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    background: #9dbc98;
-    text-align: center;
-    align-items: center;
-    align-content: center;
-}
-.footerAdmin{
-    background: #f9efdb;
-    height: 3em;
-    font-family: "Roboto", sans-serif;
-    font-weight: 100;
-    font-style: normal;
-    text-align: center;
-    align-items: center;
-    align-content: center;
-    width: 100%;
-    flex: 0.2;
-}
-#crud{
-    font-size: 8em;
-    margin-bottom: 3%;
-}
-label{
-    font-size: 1.2em;
-}
-#divPrompts{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    justify-content: space-around;
-    width: 50%;
-}
-.divChild{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    justify-content: space-around;
-    padding: 3%;
-    width: 100%;
-    margin-bottom: 6%;
-    border-style: solid;
-    border-radius: 3px;
-    border-width: 2px;
-    background: white;
-}
-#formMatch, #formPlayer, #formTeam, #formLeague, #formStadium {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    align-content: center;
-}
-.formPrompt{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    align-content: center;
-    margin-bottom: 3%;
-    width: 100%;
-    gap: 3%;
-}
-.inputSubmit{
-    background: #9dbc98;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
-    font-family: "Roboto", sans-serif;
-    font-weight: 900;
-    font-style: italic;
-    box-shadow: 0 4px 15px rgba(2, 2, 2, 1);
-    width: 30%;
-}
-table{
-    border-style: solid;
-    border-width: 3px;
-}
-table tr{
-    background: gray;
 }
