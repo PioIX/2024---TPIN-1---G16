@@ -18,6 +18,19 @@ app.listen(port, function () {
 });
 
 app.get('/users', async function (req, res) {
+    if (req.query.id_user != undefined){
+        try {
+            const response = await MySQL.makeQuery(`SELECT players_completed, players_failed, perfect_elevens, FROM Users WHERE id_user = ${req.query.id_user}`)
+            console.log("response: ", response)
+            res.send(response)
+            return;
+        }
+        catch(error){
+            console.error('Error retrieving elevens:', error);
+            res.status(500).send({ status: "error", message: "An error occurred while retrieving elevens." });
+        }
+    }
+    
     try {
         let query = req.query;
         console.log(query);
@@ -27,12 +40,12 @@ app.get('/users', async function (req, res) {
             return res.status(400).send({ status: "error", message: "Username and password are required." });
         }
 
-        const loginQuery = `SELECT * FROM Users WHERE username = "${query.username}" AND password = "${query.password}"`;
+        const loginQuery = `SELECT id_user FROM Users WHERE username = "${query.username}" AND password = "${query.password}"`;
         const loginSuccessful = await MySQL.makeQuery(loginQuery);
 
         if (loginSuccessful.length === 1) {
             console.log("Login OK");
-            res.send({ status: "ok" });
+            res.send({ status: "ok", id_user: loginSuccessful[0].id_user });
         } else {
             console.log("Login failed");
             res.status(401).send({ status: "error", message: "Invalid username or password." });
@@ -52,11 +65,12 @@ app.post('/users', async function (req, res) {
             return res.status(400).send({ status: "error", message: "All fields are required." });
         }
 
-        let usernameExists = await MySQL.makeQuery(`SELECT * FROM Users WHERE username = "${body.username}"`);
+        let usernameExists = await MySQL.makeQuery(`SELECT id_user FROM Users WHERE username = "${body.username}"`); // If does returns id_user
 
         if (usernameExists === undefined || usernameExists.length === 0) {
             await MySQL.makeQuery(`INSERT INTO Users (username, password, players_completed, players_failed, perfect_elevens) VALUES ("${body.username}", "${body.password}", "${body.players_completed}", "${body.players_failed}", "${body.perfect_elevens}");`);
-            res.send({ status: "ok", message: "User registered successfully!" });
+            let newUserId = await MySQL.makeQuery(`SELECT id_user FROM Users WHERE username = "${body.username}" AND password = "${body.password}";`);
+            res.send({ status: "ok", message: "User registered successfully!", id_user: newUserId[0].id_user });
         } else {
             console.log("Username is already used");
             res.status(401).send({ status: "error", message: "Username is already used" });

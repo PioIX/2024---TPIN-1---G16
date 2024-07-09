@@ -265,6 +265,19 @@ class Game {
         return result;
     }
 
+    async updatePlayerStats(id_match) {
+        const response = await fetch(`http://localhost:3000/elevens`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const result = await response.json();
+        console.log(result)
+        return result;
+    }
+
     async startGame(id_match, num) {
         const lineup = String(await this.getElevenLineUp(id_match));
         console.log('Lineup:', lineup); // Imprime la alineación para verificar
