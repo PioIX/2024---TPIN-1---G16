@@ -128,3 +128,115 @@
         <script src="../admin.js"></script>
     </body>
 </html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+    <link href="styles/styles.css" rel="stylesheet">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <header>
+        <h2>Guess the 11</h2>
+        <img src="images/soccer-ball-variant.png" alt="Logo" title="Logo" style="width: 45px; height: 45px;">
+    </header>
+
+    <button onclick="getAllFromMatches()">Traer todos los partidos</button>
+    <form id="formMatch">
+        <label for="match-team">Team:</label>
+        <input type="number" id="match-team" name="team">
+        <label for="match-rivalTeam">Rival Team:</label>
+        <input type="text" id="match-rivalTeam" name="rivalTeam">
+        <label for="match-result">Result:</label>
+        <input type="text" id="match-result" name="result">
+        <label for="match-date">Date:</label>
+        <input type="text" id="match-date" name="date">
+        <label for="match-stadium">Stadium:</label>
+        <input type="number" id="match-stadium" name="stadium">
+        <label for="match-league">League:</label>
+        <input type="number" id="match-league" name="league">
+    </form>
+    <input type="button" value="Add Match" onclick="addNewMatch()">
+    <div id="table-matches"></div>
+
+    <button onclick="getAllFromPlayers()">Get All Players</button>
+    <form id="formPlayer">
+        <label for="player-surname">Surname:</label>
+        <input type="text" id="player-surname" name="surname">
+        <label for="player-nationality">Nationality:</label>
+        <input type="text" id="player-nationality" name="nationality">
+        <label for="player-surname_letters">Surname Letters:</label>
+        <input type="number" id="player-surname_letters" name="surname_letters">
+    </form>
+    <input type="button" value="Add Player" onclick="addNewPlayer()">
+    <div id="table-players"></div>
+
+    <button onclick="getAllFromTeams()">Traer todos los equipos</button>
+    <form id="formTeam">
+        <label for="team-name">Name:</label>
+        <input type="text" id="team-name" name="name">
+        <label for="team-country">Country:</label>
+        <input type="text" id="team-country" name="country">
+    </form>
+    <input type="button" value="Add Team" onclick="addNewTeam()">
+    <div id="table-teams"></div>
+
+    <button onclick="getAllFromLeagues()">Traer todas las ligas</button>
+    <form id="formLeague">
+        <label for="league-name">Name:</label>
+        <input type="text" id="league-name" name="name">
+        <label for="league-country">Country:</label>
+        <input type="text" id="league-country" name="country">
+    </form>
+    <input type="button" value="Add League" onclick="addNewLeague()">
+    <div id="table-leagues"></div>
+
+    <button onclick="getAllFromStadiums()">Traer todos los estadios</button>
+    <form id="formStadium">
+        <label for="stadium-name">Name:</label>
+        <input type="text" id="stadium-name" name="name">
+        <label for="stadium-city">City:</label>
+        <input type="text" id="stadium-city" name="city">
+    </form>
+    <input type="button" value="Add Stadium" onclick="addNewStadium()">
+    <div id="table-stadiums"></div>
+    
+    <button onclick="getAllFromElevens()">Traer todos los Elevens</button>
+    <form id="formEleven">
+        <label for="eleven-name">Id Player:</label>
+        <input type="number" id="eleven-player" name="name">
+        <label for="eleven-name">Id Team:</label>
+        <input type="number" id="eleven-team" name="name">
+        <label for="eleven-shirt_number">Shirt Number:</label>
+        <input type="number" id="eleven-shirt_number" name="city">
+        <label for="eleven-position">Position:</label>
+        <input type="text" id="eleven-position" name="city">
+        <label for="eleven-match">Match:</label>
+        <input type="number" id="eleven-match" name="city">
+    </form>
+    <input type="button" value="Add Eleven" onclick="addNewEleven()">
+    <div id="table-elevens"></div>
+
+    <button onclick="getAllFromTeamsByLeagues()">Traer todos los equipos por liga</button>
+    <form id="formTeamsByLeagues">
+        <label for="teamsByLeagues-league">League ID:</label>
+        <input type="number" id="teamsByLeagues-league" name="league">
+        <label for="teamsByLeagues-team">Team ID:</label>
+        <input type="number" id="teamsByLeagues-team" name="team">
+        <label for="teamsByLeagues-team_number">Team Number:</label>
+        <input type="number" id="teamsByLeagues-team_number" name="team_number">
+    </form>
+    <input type="button" value="Add Team By League" onclick="addNewTeamByLeague()">
+    <div id="table-teams-by-leagues"></div>
+
+    <footer>
+        © 2024. The Guess The Eleven Game.
+    </footer>
+    <script src="../functions.js"></script>
+    <script src="../admin.js"></script>
+</body>
+</html>
