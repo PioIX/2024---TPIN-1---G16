@@ -1,5 +1,3 @@
-let activeUserId = null
-
 async function logIn(username, password) {
     const queryParams = `?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
@@ -20,11 +18,7 @@ async function logIn(username, password) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         
-        activeUserId = res.id_user
         alert("Login OK");
-        let hostpath = window.location.pathname
-        hostpath = hostpath.substring(0, hostpath.lastIndexOf('/'));
-        window.location.href = `${hostpath}/chooseteam.html`
         return 1;
 
     } catch (error) {
@@ -52,7 +46,6 @@ async function postUser(username, password){
     
     let res = await response.json()
     console.log(res)
-    activeUserId = res.id_user
     return res.message
 }
 
@@ -62,12 +55,5 @@ async function registerNewUser(username, password, confirmPassword) {
     }
    
     userPost = await postUser(username, password)
-    alert(userPost)
-    if (userPost == "User registered successfully!"){
-        let hostpath = window.location.pathname
-        hostpath = hostpath.substring(0, hostpath.lastIndexOf('/'));
-        window.location.href = `${hostpath}/chooseteam.html`
-        return 1;
-    }
-    return -1
+    return alert(userPost)
 }
