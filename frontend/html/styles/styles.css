@@ -5,27 +5,26 @@
 }
 
 .htmlNormal{
-    height: 100%;
     width: 100%;
+    height: 100%;
 }
 .htmlAdmin{
     width: 100%;
 }
-
 body{
-    height: 100%;
+    height: 80%;
     background-image: url("../images/fondo3.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 100%;
 }
 header{
-    text-align: left;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
+    text-align: left;
     background: #f9efdb;
     font-size: 2em;
     height: 3em;
@@ -43,18 +42,23 @@ h2{
 
 #main{
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: center;
     align-content: center;
     align-items: center;
+    text-align: center;
     font-family: "Roboto", sans-serif;
     font-weight: 400;
-    height: 80%;
     font-style: normal;
+    width: 100%;
+    height: 100%;
 }
 
 .footerNormal{
+    position: fixed;
+    bottom: 0;
     background: #f9efdb;
-    height: 3em;
+    height: 4.5em;
     font-family: "Roboto", sans-serif;
     font-weight: 100;
     font-style: normal;
@@ -62,9 +66,6 @@ h2{
     align-items: center;
     align-content: center;
     width: 100%;
-    flex: 0.2;
-    position: absolute;
-    bottom: 0;
 }
 
 input {
@@ -75,17 +76,17 @@ input {
 /*login.html*/
 #containerForm{
     background-color: white;
-    width: calc(100vw - 70vh);
-    padding: 50px;
+    width: 60%;
     border-style:solid;
     border-radius: 15px;
     border-width: 2px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
+    padding: 3%;
 }
 
 #containerForm h1{
@@ -122,8 +123,7 @@ button {
 /*register.html*/
 #registerDiv{
     background-color: white;
-    width: calc(100vw - 70vh);
-    width: calc(100vw - 70vh);
+    width: calc(30% + 50%);
     padding: 50px;
     border-style:solid;
     border-radius: 15px;
@@ -134,6 +134,7 @@ button {
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
+    padding: 3%;
 }
 #registerDiv h1{
     font-size: calc(4vw + 4vh);
