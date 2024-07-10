@@ -194,9 +194,9 @@ async function getAllFromPlayers() {
 
 async function addNewPlayer() {
     const player = {
-        surname: document.getElementById("surname").value,
-        nationality: document.getElementById("nationality").value,
-        surname_letters: document.getElementById("surname_letters").value
+        surname: document.getElementById("player-surname").value,
+        nationality: document.getElementById("player-nationality").value,
+        surname_letters: document.getElementById("player-surname_letters").value
     };
 
     console.log(player);
