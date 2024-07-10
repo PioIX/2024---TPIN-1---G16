@@ -81,6 +81,26 @@ app.post('/users', async function (req, res) {
     }
 });
 
+app.put('/users', async function (req, res) {
+    try {
+        let body = req.body;
+        console.log(body);
+
+        let statNumber = await MySQL.makeQuery(`SELECT ${body.stat} FROM Users WHERE id_user = ${body.id_user}`)
+        console.log(statNumber)
+
+        response = await MySQL.makeQuery(`
+        UPDATE Users
+        SET ${body.stat} = ${statNumber}
+        WHERE id_user = '${body.id_user}';`);
+
+        res.send(response);
+    } catch (error) {
+        console.error('Error updating match:', error);
+        res.status(500).send({ status: "error", message: "An error occurred while updating the user." });
+    }
+});
+
 // HEAD: MATCHES
 app.get('/matches', async function (req, res) {
     try {

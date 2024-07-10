@@ -193,20 +193,26 @@ class Wordle {
             }, delay);
         }
 
-        if (guessString === this.rightGuessString) {
-            toastr.success("You guessed right! Game over!");
-            this.guessesRemaining = 0;
-            return;
-        } else {
-            this.guessesRemaining -= 1;
-            this.currentGuess = [];
-            this.nextLetter = 0;
-
-            if (this.guessesRemaining === 0) {
-                toastr.error("You've run out of guesses! Game over!");
-                toastr.info(`The right word was: "${this.rightGuessString}"`);
+        setTimeout(() => {
+            if (guessString === this.rightGuessString) {
+                toastr.success("You guessed right! Game over!");
+                let text = document.getElementById(`player${this.player.id_player}`);
+                text.innerHTML = this.rightGuessString.toUpperCase();
+                
+                this.guessesRemaining = 0;
+                game.toggleWordle(this.player.id_player); // Llama a toggleWordle cuando se acierta
+            } else {
+                this.guessesRemaining -= 1;
+                this.currentGuess = [];
+                this.nextLetter = 0;
+    
+                if (this.guessesRemaining === 0) {
+                    toastr.error("You've run out of guesses! Game over!");
+                    toastr.info(`The right word was: "${this.rightGuessString}"`);
+                }
             }
-        }
+        alert("acertaste")
+        }, 2500);
     }
 
     insertLetter(pressedKey) {
@@ -265,12 +271,18 @@ class Game {
         return result;
     }
 
-    async updatePlayerStats(id_match) {
-        const response = await fetch(`http://localhost:3000/elevens`, {
+    async updatePlayerStats(stat) {
+        const userStat = {
+            id_user: localStorage.getItem("activeUserId"),
+            stat: stat
+        }
+        
+        const response = await fetch(`http://localhost:3000/users`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify(userStat)
         });
 
         const result = await response.json();

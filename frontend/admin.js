@@ -1,4 +1,10 @@
-console.log("hello world!");
+let activeUserId = localStorage.getItem("activeUserId")
+
+if(activeUserId != 1){
+    let hostpath = window.location.pathname
+    hostpath = hostpath.substring(0, hostpath.lastIndexOf('/'));
+    window.location.href = `${hostpath}/chooseteam.html`
+}
 
 async function getAllFromMatches() {
     const response = await fetch("http://localhost:3000/matches", {
