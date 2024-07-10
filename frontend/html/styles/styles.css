@@ -258,12 +258,12 @@ table tr{
 }
 
 .start{
-    height: 7.5vh;
+    height: calc(2em + 0.5em);
+    width: calc(6em + 0.5em);
     border-radius: 90px;
     border-width: 0%;
     text-decoration: none;
     color: black;
-    margin: 0 20px 0 auto;
 }
 .button{
     font-size: 1.5em;
@@ -273,17 +273,38 @@ table tr{
     color: black;
     margin-left: auto;
 }
+#text{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items: center;
+    align-content: center;
+    text-align: left;
+    width: 50%;
+}
+#divButton{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: right;
+    align-items: right;
+    align-content: right;
+    text-align: right;
+    width: 30%;
+}
 #startContainer{
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     align-content: center;
+    justify-content: space-around;
     background: #f9efdb; 
     width: 100%;
     height: 30vh;
 }
 #startContainer h2{
-    font-size: 5em;
+    font-size: calc(4vh + 4vw);
 }
 /*r
