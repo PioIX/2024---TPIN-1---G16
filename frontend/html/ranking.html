@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html class="htmlNormal" lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +9,35 @@
 </head>
 <body>
     <header> 
-        <h2> Guess the 11 </h2>
+        <h2>Guess the 11</h2>
+        <img src="images/soccer-ball-variant.png" alt="Logo" title="Logo" style="width: 45px; height: 45px;">
     </header>
-    <main class="inicio"> 
-        <h1 class="titulo">Guess the 11</h1>
-        <h2 class="comenzar"><a href="../login.html" translate="no">Comenzar</a></h2>
-    </main>
+    <div id="main">
+        <div id="rankingDiv">
+            <h1>RANKING</h1>
+            <div id="tops">
+                <div id="medals">
+                    <div id="firstPlace">
+                        <img src="images/firstPlace.png" alt="firstPlace" title="firstPlace" style="width: 60px; height: 60px;">
+                        <h3 id="h3FirstPlace"></h3>
+                    </div>
+                    <div id="secondPlace">
+                        <img src="images/secondPlace.png" alt="secondPlace" title="secondPlace" style="width: 60px; height: 60px;">
+                        <h3 id="h3SecondPlace"></h3>
+                    </div>
+                    <div id="thirdPlace">
+                        <img src="images/thirdPlace.png" alt="thirdPlace" title="thirdPlace" style="width: 60px; height: 60px;">
+                        <h3 id="h3ThirdPlace"></h3>
+                    </div>
+                    <div id="continueButton">
+                        <a class= "continueA" href="eleven.html">
+                            <button class="continue">Continue</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
     <script src="functions.js"></script>
     <script src="dom.js"></script>
     <script src="domLogin.js"></script>

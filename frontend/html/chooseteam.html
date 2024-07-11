@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html class="htmlNormal" lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +9,26 @@
 </head>
 <body>
     <header> 
-        <h2> Guess the 11 </h2>
+        <h2>Guess the 11</h2>
+        <img src="images/soccer-ball-variant.png" alt="Logo" title="Logo" style="width: 45px; height: 45px;">
     </header>
-    <main class="inicio"> 
-        <h1 class="titulo">Guess the 11</h1>
-        <h2 class="comenzar"><a href="../login.html" translate="no">Comenzar</a></h2>
-    </main>
+    <div id="main"> 
+        <div id="chooseTeam">
+            <h2>CHOOSE TEAM</h2>
+            <div id="seleccionEquipo">
+                <h3>Today's team</h3>
+                <p id="todayTeam"></p>
+            </div>
+            <div id="divSelect">
+                <select id="league">Sort by league
+                    <option>By league</option>
+                </select>
+                <select id="season">Sort by season
+                    <option>By period</option>
+                </select>
+            </div>
+        </div>
+    </div>
     <script src="functions.js"></script>
     <script src="dom.js"></script>
     <script src="domLogin.js"></script>

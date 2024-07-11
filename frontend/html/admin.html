@@ -49,6 +49,7 @@
                     <input type="submit" class="inputSubmit" onclick="addNewMatch()"><br>
                     <div id="table-matches"></div>
                 </div>
+<<<<<<< Updated upstream
 
                 <div class="divChild">
                     <button class="getAll" onclick="getAllFromPlayers()">Get all players</button>
@@ -144,57 +145,81 @@
         <h2>Guess the 11</h2>
         <img src="images/soccer-ball-variant.png" alt="Logo" title="Logo" style="width: 45px; height: 45px;">
     </header>
+=======
+>>>>>>> Stashed changes
 
-    <button onclick="getAllFromMatches()">Traer todos los partidos</button>
-    <form id="formMatch">
-        <label for="match-team">Team:</label>
-        <input type="number" id="match-team" name="team">
-        <label for="match-rivalTeam">Rival Team:</label>
-        <input type="text" id="match-rivalTeam" name="rivalTeam">
-        <label for="match-result">Result:</label>
-        <input type="text" id="match-result" name="result">
-        <label for="match-date">Date:</label>
-        <input type="text" id="match-date" name="date">
-        <label for="match-stadium">Stadium:</label>
-        <input type="number" id="match-stadium" name="stadium">
-        <label for="match-league">League:</label>
-        <input type="number" id="match-league" name="league">
-    </form>
-    <input type="button" value="Add Match" onclick="addNewMatch()">
-    <div id="table-matches"></div>
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromPlayers()">Get all players</button>
+                    <form id="formPlayer">
+                        <div class="formPrompt">
+                            <label for="surname"><b>Surname</b></label>
+                            <input type="text" id="player-surname" name="surname">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="nationality"><b>Nationality</b></label>
+                            <input type="text" id="player-nationality" name="nationality">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="surname_letters"><b>Surname Letters</b></label>
+                            <input type="number" id="player-surname_letters" name="surname_letters">
+                        </div>
+                        
+                    </form>
+                    <input type="submit" class="inputSubmit" onclick="addNewPlayer()">
+                    <div id="table-players"></div>
+                </div>
 
-    <button onclick="getAllFromPlayers()">Get All Players</button>
-    <form id="formPlayer">
-        <label for="player-surname">Surname:</label>
-        <input type="text" id="player-surname" name="surname">
-        <label for="player-nationality">Nationality:</label>
-        <input type="text" id="player-nationality" name="nationality">
-        <label for="player-surname_letters">Surname Letters:</label>
-        <input type="number" id="player-surname_letters" name="surname_letters">
-    </form>
-    <input type="button" value="Add Player" onclick="addNewPlayer()">
-    <div id="table-players"></div>
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromTeams()">Get all teams</button>
+                    <form id="formTeam">
+                        <div class="formPrompt">
+                            <label for="name"><b>Name</b></label>
+                            <input type="text" id="team-name" name="name">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="country"><b>Country</b></label>
+                            <input type="text" id="team-country" name="country">
+                        </div>
+                    </form>
+                    <input type="submit"class="inputSubmit" onclick="addNewTeam()">
+                    <div id="table-teams"></div>
+                </div>
 
-    <button onclick="getAllFromTeams()">Traer todos los equipos</button>
-    <form id="formTeam">
-        <label for="team-name">Name:</label>
-        <input type="text" id="team-name" name="name">
-        <label for="team-country">Country:</label>
-        <input type="text" id="team-country" name="country">
-    </form>
-    <input type="button" value="Add Team" onclick="addNewTeam()">
-    <div id="table-teams"></div>
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromLeagues()">Get all leagues</button>
+                    <form id="formLeague">
+                        <div class="formPrompt">
+                            <label for="name"><b>Name</b></label>
+                            <input type="text" id="league-name" name="name">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="country"><b>Country</b></label>
+                            <input type="text" id="league-country" name="country">
+                        </div>
+                    </form>
+                    <input type="submit" class="inputSubmit" onclick="addNewLeague()">
+                    <div id="table-leagues"></div>
+                </div>
 
-    <button onclick="getAllFromLeagues()">Traer todas las ligas</button>
-    <form id="formLeague">
-        <label for="league-name">Name:</label>
-        <input type="text" id="league-name" name="name">
-        <label for="league-country">Country:</label>
-        <input type="text" id="league-country" name="country">
-    </form>
-    <input type="button" value="Add League" onclick="addNewLeague()">
-    <div id="table-leagues"></div>
+                <div class="divChild">
+                    <button class="getAll" onclick="getAllFromStadiums()">Get all stadiums</button>
+                    <form id="formStadium">
+                        <div class="formPrompt">
+                            <label for="name"><b>Name</b></label>
+                            <input type="text" id="stadium-name" name="name">
+                        </div>
+                        <div class="formPrompt">
+                            <label for="city"><b>City</b></label>
+                            <input type="text" id="stadium-city" name="city">
+                        </div>
+                    </form>
+                    <input type="submit" class="inputSubmit" onclick="addNewStadium()">
+                    <div id="table-stadiums"></div>
+                </div>
+            </div>
+        </div>
 
+<<<<<<< Updated upstream
     <button onclick="getAllFromStadiums()">Traer todos los estadios</button>
     <form id="formStadium">
         <label for="stadium-name">Name:</label>
@@ -239,4 +264,12 @@
     <script src="../functions.js"></script>
     <script src="../admin.js"></script>
 </body>
+=======
+        <footer class="footerAdmin">
+            © 2024. The Guess The Eleven Game.
+        </footer>
+        <script src="../functions.js"></script>
+        <script src="../admin.js"></script>
+    </body>
+>>>>>>> Stashed changes
 </html>
