@@ -1,5 +1,3 @@
-let activeUserId = null
-
 async function logIn(username, password) {
     const queryParams = `?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
@@ -20,7 +18,7 @@ async function logIn(username, password) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         
-        activeUserId = res.id_user
+        localStorage.setItem("activeUserId", res.id_user)
         alert("Login OK");
         let hostpath = window.location.pathname
         hostpath = hostpath.substring(0, hostpath.lastIndexOf('/'));
@@ -52,7 +50,7 @@ async function postUser(username, password){
     
     let res = await response.json()
     console.log(res)
-    activeUserId = res.id_user
+    localStorage.setItem("activeUserId", res.id_user)
     return res.message
 }
 
